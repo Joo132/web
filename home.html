@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Joo | Development Master Hub</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        :root {
+            --bg: #09090b;
+            --surface: #18181b;
+            --primary: #ffffff;
+            --accent: #3b82f6;
+            --text: #fafafa;
+            --text-dim: #a1a1aa;
+            --border: rgba(255, 255, 255, 0.08);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            overflow-x: hidden;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Navbar */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 24px 48px;
+            position: absolute;
+            width: 100%;
+            top: 0;
+            z-index: 10;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 800;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            letter-spacing: -0.5px;
+        }
+
+        .login-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border);
+            color: #fff;
+            padding: 12px 28px;
+            border-radius: 100px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            backdrop-filter: blur(10px);
+        }
+
+        .login-btn:hover {
+            background: #fff;
+            /* White bg on hover */
+            color: #000;
+            /* Black text on hover */
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .discord-login-btn {
+            background: #5865F2;
+            border: 1px solid #5865F2;
+            color: #fff;
+            padding: 12px 28px;
+            border-radius: 100px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-left: 12px;
+        }
+
+        .discord-login-btn:hover {
+            background: #4752C4;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(88, 101, 242, 0.4);
+        }
+
+        /* Hero Section */
+        .hero {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+            padding-top: 100px;
+            /* Push content down */
+            padding-bottom: 60px;
+        }
+
+        .hero h1 {
+            font-size: 72px;
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 24px;
+            background: linear-gradient(135deg, #fff 0%, #a1a1aa 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            opacity: 0;
+            animation: heroFadeIn 1s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+        }
+
+        .hero p {
+            font-size: 18px;
+            color: var(--text-dim);
+            max-width: 600px;
+            line-height: 1.6;
+            margin-bottom: 40px;
+            opacity: 0;
+            animation: heroFadeIn 1s cubic-bezier(0.2, 0.8, 0.2, 1) 0.2s forwards;
+        }
+
+        .cta-btn {
+            background: var(--accent);
+            color: #fff;
+            padding: 16px 40px;
+            border-radius: 16px;
+            font-size: 16px;
+            font-weight: 700;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s;
+            border: none;
+            opacity: 0;
+            animation: heroFadeIn 1s cubic-bezier(0.2, 0.8, 0.2, 1) 0.4s forwards;
+            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.2);
+        }
+
+        .cta-btn:hover {
+            transform: translateY(-4px) scale(1.02);
+            box-shadow: 0 10px 30px rgba(59, 130, 246, 0.4);
+        }
+
+        @keyframes heroFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Background Glows */
+        .glow {
+            position: absolute;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(59, 130, 246, 0.15) 0%, rgba(0, 0, 0, 0) 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .glow-1 {
+            top: -200px;
+            right: -200px;
+        }
+
+        .glow-2 {
+            bottom: -200px;
+            left: -200px;
+            background: radial-gradient(circle, rgba(16, 185, 129, 0.1) 0%, rgba(0, 0, 0, 0) 70%);
+        }
+
+        /* Reviews Section (Display Only) */
+        .reviews-section {
+            padding: 40px 24px;
+            /* Reduced vertical padding */
+            width: 100%;
+            max-width: 1400px;
+            margin: 0 auto;
+            overflow: hidden;
+            position: relative;
+            z-index: 2;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 40px;
+            max-width: 1200px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .section-title {
+            font-size: 32px;
+            font-weight: 700;
+        }
+
+        .review-carousel {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            width: 100%;
+        }
+
+        .review-row {
+            display: flex;
+            gap: 20px;
+            animation: scrollLeft 15s linear infinite;
+            width: fit-content;
+        }
+
+        .review-row:nth-child(2) {
+            animation: scrollRight 15s linear infinite;
+        }
+
+        .review-row:hover {
+            animation-play-state: paused;
+        }
+
+        @keyframes scrollLeft {
+            0% {
+                transform: translateX(0);
+            }
+
+            100% {
+                transform: translateX(-50%);
+            }
+        }
+
+        @keyframes scrollRight {
+            0% {
+                transform: translateX(-50%);
+            }
+
+            100% {
+                transform: translateX(0);
+            }
+        }
+
+        .review-card {
+            background: #131316;
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 20px;
+            min-width: 350px;
+            max-width: 350px;
+            flex-shrink: 0;
+            transition: transform 0.2s, border-color 0.2s;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .review-card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .review-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 16px;
+        }
+
+        .user-info {
+            display: flex;
+            gap: 12px;
+        }
+
+        .avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #27272a;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .user-details {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .username {
+            font-weight: 600;
+            font-size: 15px;
+        }
+
+        .location {
+            font-size: 12px;
+            color: var(--text-dim);
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .rating-star {
+            color: #4ade80;
+            display: flex;
+            gap: 2px;
+        }
+
+        .review-text {
+            font-size: 14px;
+            line-height: 1.6;
+            color: #d1d1d6;
+            margin-bottom: 16px;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            flex-grow: 1;
+        }
+
+        .review-footer {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+            margin-top: auto;
+            padding-top: 16px;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .review-tag {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border);
+            padding: 6px 10px;
+            border-radius: 100px;
+            font-size: 11px;
+            color: var(--text-dim);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .review-tag:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .review-tag i {
+            width: 14px;
+            height: 14px;
+            color: #4ade80;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="glow glow-1"></div>
+    <div class="glow glow-2"></div>
+
+    <nav class="navbar">
+        <div class="logo">
+            Joo Development
+        </div>
+        <div style="display: flex; align-items: center;">
+
+            <a href="/login" class="login-btn">
+                Login
+                <i data-lucide="arrow-right" style="width:16px;"></i>
+            </a>
+        </div>
+    </nav>
+
+    <div class="hero">
+        <h1>Discord Bots<br>Redefined.</h1>
+        <p>Your premier destination for high-quality Discord services and custom bots.<br>Take full control of your
+            server with our advanced systems.</p>
+
+        <a href="/login" class="cta-btn">
+            Get Started <i data-lucide="chevron-right"></i>
+        </a>
+    </div>
+
+    <!-- Reviews Section -->
+    <div class="reviews-section">
+        <div class="section-header">
+            <div class="section-title">What Our Customers Say</div>
+        </div>
+
+        <div class="review-carousel" id="reviewCarousel">
+            <!-- Row 1 - Scrolls Left -->
+            <div class="review-row" id="reviewRow1"></div>
+            <!-- Row 2 - Scrolls Right -->
+            <div class="review-row" id="reviewRow2"></div>
+        </div>
+    </div>
+
+    <script>
+        lucide.createIcons();
+
+        // Load Reviews
+        async function loadReviews() {
+            try {
+                const res = await fetch('/api/public/feedback/list');
+                const data = await res.json();
+
+                if (data.success && data.feedbacks) {
+                    renderReviews(data.feedbacks);
+                }
+            } catch (e) {
+                console.error("Failed to load reviews", e);
+            }
+        }
+
+        function renderReviews(reviews) {
+            const row1 = document.getElementById('reviewRow1');
+            const row2 = document.getElementById('reviewRow2');
+
+            if (!reviews || reviews.length === 0) {
+                const section = document.querySelector('.reviews-section');
+                if (section) section.style.display = 'none'; // Hide if no reviews
+                return;
+            }
+
+            // Ensure both rows have at least one review if possible
+            let row1Reviews, row2Reviews;
+            if (reviews.length === 1) {
+                row1Reviews = reviews;
+                row2Reviews = reviews;
+            } else {
+                const half = Math.ceil(reviews.length / 2);
+                row1Reviews = reviews.slice(0, half);
+                row2Reviews = reviews.slice(half);
+            }
+
+            const createCard = (r) => `
+                <div class="review-card">
+                    <div class="review-header">
+                        <div class="user-info">
+                            <div class="avatar">
+                                <img src="${r.discord_avatar || 'https://cdn.discordapp.com/embed/avatars/0.png'}" style="width:100%;height:100%;border-radius:50%;object-fit:cover;">
+                            </div>
+                            <div class="user-details">
+                                <span class="username">${escapeHtml(r.name)}</span>
+                            </div>
+                        </div>
+                        <div class="rating-star">
+                            ${'<i data-lucide="star" fill="#4ade80" stroke="none" style="width:16px;"></i>'.repeat(r.rating || 5)}
+                        </div>
+                    </div>
+                    <div class="review-text">
+                        ${escapeHtml(r.message)}
+                    </div>
+                    <div class="review-footer">
+                        <div class="review-tag">
+                            <i data-lucide="package"></i>
+                            ${escapeHtml(r.module_name || 'Custom Bot')}
+                        </div>
+
+                    </div>
+                </div>
+            `;
+
+            const row1HTML = row1Reviews.map(createCard).join('');
+            const row2HTML = row2Reviews.map(createCard).join('');
+
+            // Duplicate multiple times for infinite effect
+            row1.innerHTML = row1HTML.repeat(8);
+            row2.innerHTML = row2HTML.repeat(8);
+            lucide.createIcons();
+        }
+
+        function escapeHtml(text) {
+            if (!text) return '';
+            const map = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' };
+            return text.replace(/[&<>"']/g, m => map[m]);
+        }
+
+        loadReviews();
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,3109 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Joo | Development Master Hub</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        if (typeof lucide === 'undefined') {
+            window.lucide = {
+                createIcons: () => { console.warn('Lucide icons failed to load.'); }
+            };
+        }
+    </script>
+    <style>
+        :root {
+            --bg: #09090b;
+            --surface: #18181b;
+            --surface-accent: #27272a;
+            --primary: #ffffff;
+            --accent: #3b82f6;
+            --text: #fafafa;
+            --text-dim: #a1a1aa;
+            --border: rgba(255, 255, 255, 0.08);
+            --danger: #ef4444;
+            --success: #10b981;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Outfit', sans-serif;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            height: 100vh;
+            display: flex;
+            overflow: hidden;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 280px;
+            background: var(--surface);
+            border-right: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            padding: 32px 24px;
+            z-index: 10;
+        }
+
+        .logo {
+            font-size: 22px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            margin-bottom: 48px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: var(--primary);
+        }
+
+        .logo-dot {
+            width: 12px;
+            height: 12px;
+            background: var(--accent);
+            border-radius: 3px;
+        }
+
+        .nav-item {
+            padding: 12px 16px;
+            border-radius: 12px;
+            cursor: pointer;
+            cursor: pointer;
+            margin-bottom: 8px;
+            color: var(--text-dim);
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .nav-item:hover {
+            background: var(--surface-accent);
+            color: var(--text);
+            transform: translateX(5px);
+        }
+
+        .nav-item.active {
+            background: var(--primary);
+            color: var(--bg);
+        }
+
+        /* Main Content */
+        .main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+            background: radial-gradient(circle at 50% 0%, #171717 0%, transparent 60%);
+        }
+
+        .header {
+            padding: 24px 48px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border);
+            background: rgba(9, 9, 11, 0.5);
+            backdrop-filter: blur(12px);
+            position: sticky;
+            top: 0;
+            z-index: 5;
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 8px 16px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .user-profile:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: var(--accent);
+        }
+
+        .user-avatar {
+            width: 42px;
+            height: 42px;
+            border-radius: 12px;
+            object-fit: cover;
+            border: 2px solid var(--border);
+        }
+
+        .user-info-text {
+            display: flex;
+            flex-direction: column;
+            text-align: right;
+        }
+
+        .user-name {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--text);
+        }
+
+        .user-role {
+            font-size: 11px;
+            color: var(--text-dim);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .content {
+            padding: 48px;
+            max-width: 1400px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        /* Stats Card */
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            margin-bottom: 48px;
+        }
+
+        .stat-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            padding: 32px;
+            border-radius: 24px;
+            cursor: default;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-8px);
+            border-color: var(--accent);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 0 0 20px rgba(59, 130, 246, 0.1);
+            background: linear-gradient(135deg, var(--surface) 0%, rgba(59, 130, 246, 0.05) 100%);
+        }
+
+        .stat-card:hover {
+            border-color: var(--accent);
+        }
+
+        .stat-label {
+            font-size: 14px;
+            color: var(--text-dim);
+            margin-bottom: 8px;
+            font-weight: 500;
+            text-transform: uppercase;
+        }
+
+        .stat-value {
+            font-size: 38px;
+            font-weight: 800;
+            color: var(--primary);
+        }
+
+        /* Grid & Cards */
+        .section-header {
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .section-header h2 {
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .section-header .line {
+            flex: 1;
+            height: 1px;
+            background: var(--border);
+        }
+
+        .module-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 24px;
+            margin-bottom: 48px;
+        }
+
+        .module-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 28px;
+            border-radius: 28px;
+            padding: 32px;
+        }
+
+        .module-name {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .module-desc {
+            font-size: 14px;
+            color: var(--text-dim);
+            margin-bottom: 24px;
+            line-height: 1.6;
+        }
+
+        /* License Vault Table */
+        .vault-container {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            overflow: hidden;
+            margin-top: 32px;
+        }
+
+        .vault-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .vault-table th {
+            text-align: left;
+            padding: 20px 24px;
+            background: var(--surface-accent);
+            color: var(--text-dim);
+            font-size: 12px;
+            text-transform: uppercase;
+        }
+
+        .vault-table td {
+            padding: 18px 24px;
+            border-bottom: 1px solid var(--border);
+            font-size: 14px;
+        }
+
+        .vault-table tr:hover {
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        /* Generator Overlay */
+        .generator-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 40px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            margin-bottom: 32px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        /* Hide Default Spinners */
+        input[type="number"]::-webkit-inner-spin-button,
+        input[type="number"]::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        input[type="number"] {
+            -moz-appearance: textfield;
+            appearance: textfield;
+        }
+
+        /* Premium Stepper Styles */
+        .stepper-container {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .stepper-btn {
+            position: absolute;
+            right: 8px;
+            width: 32px;
+            height: 32px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            color: var(--text-dim);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            z-index: 5;
+        }
+
+        .stepper-btn:hover {
+            background: var(--surface-accent);
+            color: #fff;
+            border-color: var(--accent);
+        }
+
+        .stepper-btn.minus {
+            right: 48px;
+        }
+
+        .stepper-btn.plus {
+            right: 8px;
+        }
+
+        .stepper-container input {
+            padding-right: 90px;
+        }
+
+        label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-dim);
+            margin-bottom: 12px;
+        }
+
+        input,
+        select {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border);
+            padding: 16px 20px;
+            border-radius: 16px;
+            color: #fff;
+            font-size: 15px;
+            font-weight: 500;
+            outline: none;
+            appearance: none;
+        }
+
+        /* Custom Select (Premium OLED) */
+        .custom-select {
+            position: relative;
+            width: 100%;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .select-trigger {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border);
+            padding: 16px 20px;
+            border-radius: 16px;
+            color: #fff;
+            font-size: 15px;
+            font-weight: 500;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .custom-select:hover .select-trigger {
+            border-color: var(--accent);
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+
+
+        .select-options {
+            position: absolute;
+            top: calc(100% + 12px);
+            left: 0;
+            right: 0;
+            background: rgba(18, 18, 18, 0.85);
+            backdrop-filter: blur(24px);
+            border: 1px solid var(--border);
+            border-radius: 18px;
+            overflow: hidden;
+            display: none;
+            z-index: 1000;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+            animation: slideDown 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        .custom-select.active .select-options {
+            display: block !important;
+        }
+
+        .custom-select.active .select-trigger i {
+            transform: rotate(180deg);
+        }
+
+        .option-item {
+            padding: 14px 20px;
+            color: var(--text-dim);
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .option-item:hover {
+            background: rgba(255, 255, 255, 0.08);
+            color: #fff;
+        }
+
+        .option-item.selected {
+            color: var(--accent);
+            background: rgba(59, 130, 246, 0.05);
+        }
+
+        /* Custom Date Picker (Premium OLED) */
+        .date-picker-container {
+            position: relative;
+        }
+
+        .calendar-dropdown {
+            position: absolute;
+            top: calc(100% + 12px);
+            left: 0;
+            width: 280px;
+            background: rgba(18, 18, 18, 0.9);
+            backdrop-filter: blur(24px);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 20px;
+            display: none;
+            z-index: 2000;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+            animation: slideDown 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .date-picker-container.active .calendar-dropdown {
+            display: block;
+        }
+
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 5px;
+            text-align: center;
+        }
+
+        .calendar-day-name {
+            font-size: 11px;
+            color: var(--text-dim);
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .calendar-day {
+            padding: 8px;
+            font-size: 13px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .calendar-day:hover:not(.empty) {
+            background: rgba(255, 255, 255, 0.05);
+            color: #fff;
+        }
+
+        .calendar-day.selected {
+            background: var(--accent);
+            color: #fff;
+        }
+
+        .calendar-day.empty {
+            cursor: default;
+        }
+
+        .calendar-btn {
+            padding: 5px;
+            cursor: pointer;
+            color: var(--text-dim);
+        }
+
+        .calendar-btn:hover {
+            color: #fff;
+        }
+
+        .calendar-year-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .calendar-year-item {
+            padding: 10px 5px;
+            font-size: 13px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: center;
+        }
+
+        .calendar-year-item:hover {
+            background: rgba(255, 255, 255, 0.05);
+            color: #fff;
+        }
+
+        .calendar-year-item.selected {
+            background: var(--accent);
+            color: #fff;
+        }
+
+        .date-picker-container .select-trigger::after {
+            display: none;
+        }
+
+        .btn-master {
+            background: var(--primary);
+            color: #000;
+            padding: 18px;
+            border-radius: 14px;
+            font-weight: 700;
+            border: none;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        .btn-master:hover {
+            box-shadow: 0 5px 15px rgba(255, 255, 255, 0.05);
+        }
+
+        .btn-delete {
+            color: var(--danger);
+            background: rgba(239, 68, 68, 0.05);
+            border: 1px solid rgba(239, 68, 68, 0.1) !important;
+        }
+
+        .btn-delete:hover {
+            background: var(--danger) !important;
+            color: #fff !important;
+            box-shadow: 0 0 10px rgba(239, 68, 68, 0.2);
+        }
+
+        /* Icons */
+        .icon-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            background: var(--surface-accent);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            border: 1px solid var(--border);
+            color: var(--text-dim);
+        }
+
+        .icon-btn:hover {
+            background: var(--primary);
+            color: var(--bg);
+            border-color: var(--primary);
+        }
+
+        /* Modals */
+        #modalOverlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(10px);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal {
+            background: rgba(24, 24, 27, 0.8);
+            backdrop-filter: blur(30px) saturate(150%);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            width: 750px;
+            border-radius: 32px;
+            padding: 56px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            animation: premiumPop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        @keyframes premiumPop {
+            0% {
+                transform: scale(0.9) translateY(20px);
+                opacity: 0;
+            }
+
+            100% {
+                transform: scale(1) translateY(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideDown {
+            0% {
+                transform: translateY(-10px);
+                opacity: 0;
+            }
+
+            100% {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        /* Login Screen */
+        #loginOverlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--bg);
+            z-index: 5000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .login-box {
+            width: 420px;
+            text-align: center;
+        }
+
+        .pass-container {
+            position: relative;
+            margin-bottom: 32px;
+        }
+
+        .eye-toggle {
+            position: absolute;
+            right: 20px;
+            top: 18px;
+            cursor: pointer;
+            color: var(--text-dim);
+            display: none;
+            user-select: none;
+        }
+
+        .badge {
+            padding: 5px 12px;
+            border-radius: 100px;
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid transparent;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .badge:hover {
+            filter: brightness(1.2);
+        }
+
+        .badge-active {
+            background: rgba(16, 185, 129, 0.08);
+            color: #10b981;
+            border-color: rgba(16, 185, 129, 0.2);
+            box-shadow: 0 0 15px rgba(16, 185, 129, 0.1);
+        }
+
+        .badge-disabled {
+            background: rgba(239, 68, 68, 0.08);
+            color: #ef4444;
+            border-color: rgba(239, 68, 68, 0.2);
+            box-shadow: 0 0 15px rgba(239, 68, 68, 0.1);
+        }
+
+        .badge-new {
+            background: rgba(59, 130, 246, 0.1);
+            color: #60a5fa;
+            border-color: rgba(96, 165, 250, 0.2);
+            box-shadow: 0 0 15px rgba(59, 130, 246, 0.1);
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 32px;
+            right: 32px;
+            padding: 16px 24px;
+            border-radius: 16px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            color: white;
+            display: none;
+            z-index: 10000;
+        }
+
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.2);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--surface-accent);
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--accent);
+        }
+
+        .search-container {
+            position: relative;
+            margin-bottom: 24px;
+        }
+
+        .search-container i,
+        .search-container svg {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-dim);
+            pointer-events: none;
+        }
+
+        .search-container input {
+            padding-left: 48px;
+        }
+
+        .nested-vault {
+            max-height: 400px;
+            overflow-y: auto;
+            margin-top: 16px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            background: rgba(0, 0, 0, 0.2);
+        }
+
+        .module-card {
+            background: var(--surface);
+            padding: 24px;
+            border-radius: 20px;
+            border: 1px solid var(--border);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .module-card:hover {
+            transform: scale(1.02) translateY(-4px);
+            border-color: var(--accent);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Overview Widgets */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 24px;
+        }
+
+        .widget-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 24px;
+            margin-bottom: 24px;
+        }
+
+        .widget-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .widget-title {
+            font-size: 16px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* Activity Feed */
+        .activity-feed {
+            max-height: 600px;
+            overflow-y: auto;
+            padding-right: 10px;
+        }
+
+        .activity-item {
+            display: flex;
+            gap: 16px;
+            padding-bottom: 20px;
+            margin-bottom: 20px;
+            border-bottom: 1px solid var(--border);
+            position: relative;
+        }
+
+        .activity-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .activity-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            background: var(--surface-accent);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-dim);
+            flex-shrink: 0;
+        }
+
+        .activity-content {
+            flex: 1;
+        }
+
+        .activity-msg {
+            font-size: 14px;
+            margin-bottom: 4px;
+            line-height: 1.4;
+        }
+
+        .activity-time {
+            font-size: 11px;
+            color: var(--text-dim);
+        }
+
+        /* Expiry Table */
+        .expiry-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .expiry-row:last-child {
+            border-bottom: none;
+        }
+
+        .file-upload-wrapper {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.02);
+            border: 2px dashed var(--border);
+            border-radius: 18px;
+            padding: 24px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .file-upload-wrapper:hover {
+            border-color: var(--accent);
+            background: rgba(59, 130, 246, 0.05);
+        }
+
+        .file-upload-wrapper i {
+            transition: transform 0.3s ease;
+        }
+
+        .file-upload-wrapper:hover i {
+            transform: translateY(-4px);
+        }
+
+        .progress-container {
+            width: 100%;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 4px;
+            margin-top: 16px;
+            overflow: hidden;
+            display: none;
+            position: relative;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            background: var(--accent);
+            width: 0%;
+            transition: width 0.3s ease;
+            box-shadow: 0 0 10px var(--accent);
+        }
+
+        .progress-text {
+            font-size: 11px;
+            color: var(--text-dim);
+            margin-top: 8px;
+            text-align: center;
+            display: none;
+        }
+
+        /* Premium Tooltip */
+        .premium-tooltip {
+            position: fixed;
+            background: rgba(18, 18, 18, 0.95);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--border);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 10px;
+            font-size: 12px;
+            font-weight: 600;
+            pointer-events: none;
+            z-index: 999999;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+            opacity: 0;
+            transform: translateY(5px);
+            transition: opacity 0.2s, transform 0.2s;
+            white-space: nowrap;
+        }
+
+        .premium-tooltip.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+
+<body>
+
+    <aside class="sidebar">
+        <div class="logo">
+            <i data-lucide="code-xml" style="width:24px; height:24px; color:var(--accent);"></i> Joo Development
+        </div>
+        <nav>
+            <div class="nav-item active" onclick="showTab('overview', this)">
+                <i data-lucide="layout-dashboard" style="width:20px; height:20px;"></i>
+                Overview
+            </div>
+
+            <div class="nav-item" onclick="showTab('licenses', this)">
+                <i data-lucide="key-round" style="width:20px; height:20px;"></i>
+                Licenses
+            </div>
+            <div class="nav-item" onclick="showTab('modules', this)">
+                <i data-lucide="package" style="width:20px; height:20px;"></i>
+                Bot Modules
+            </div>
+            <div class="nav-item" id="nav-users" onclick="showTab('users', this)" style="display:none;">
+                <i data-lucide="users" style="width:20px; height:20px;"></i>
+                Users
+            </div>
+            <div class="nav-item" onclick="showTab('versions', this)">
+                <i data-lucide="git-branch" style="width:20px; height:20px;"></i>
+                Versions
+            </div>
+            <div class="nav-item" onclick="showTab('blacklist', this)">
+                <i data-lucide="shield-off" style="width:20px; height:20px;"></i>
+                Blacklist
+            </div>
+            <div class="nav-item" onclick="showTab('logs', this)">
+                <i data-lucide="activity" style="width:20px; height:20px;"></i>
+                Activity Logs
+            </div>
+            <div class="nav-item" onclick="showTab('settings', this)">
+                <i data-lucide="settings" style="width:20px; height:20px;"></i>
+                Settings
+            </div>
+        </nav>
+        <div class="nav-item" style="margin-top: auto; color: var(--danger)" onclick="logout()">
+            <i data-lucide="log-out" style="width:20px; height:20px;"></i>
+            Log out
+        </div>
+    </aside>
+
+    <main class="main">
+        <header class="header">
+            <h1 id="tabTitle">Overview</h1>
+            <div class="user-profile">
+                <div class="user-info-text">
+                    <span class="user-name" id="loggedInUser">...</span>
+                    <span class="user-role" id="userRole">...</span>
+                </div>
+                <img src="https://cdn.discordapp.com/embed/avatars/0.png" class="user-avatar" id="userAvatar">
+            </div>
+        </header>
+
+        <!-- OVERVIEW TAB -->
+        <div class="content" id="overviewTab">
+            <div class="stats-row">
+                <div class="stat-card">
+                    <p class="stat-label">Total Bot Modules</p>
+                    <p class="stat-value" id="stat-modules">0</p>
+                </div>
+                <div class="stat-card">
+                    <p class="stat-label">Active Licenses</p>
+                    <p class="stat-value" id="stat-active">0</p>
+                </div>
+                <div class="stat-card">
+                    <p class="stat-label">Network Load</p>
+                    <p class="stat-value" id="stat-load">0%</p>
+                </div>
+            </div>
+
+            <div class="dashboard-grid">
+                <!-- Left Column -->
+                <div>
+                    <div class="widget-card">
+                        <div class="widget-header">
+                            <div class="widget-title"><i data-lucide="zap" style="color:var(--accent)"></i> Live
+                                Deployments</div>
+                        </div>
+                        <div id="liveGrid" class="module-grid"
+                            style="margin-bottom: 0; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));">
+                            <!-- Bot reports here -->
+                        </div>
+                    </div>
+
+                    <div class="widget-card">
+                        <div class="widget-header">
+                            <div class="widget-title"><i data-lucide="hourglass" style="color:#f59e0b"></i> Expiring
+                                Soon (7 Days)</div>
+                        </div>
+                        <div id="expiryList">
+                            <!-- Expiring items here -->
+                        </div>
+                    </div>
+
+
+                </div>
+
+                <!-- Right Column -->
+                <div>
+                    <div class="widget-card">
+                        <div class="widget-header">
+                            <div class="widget-title"><i data-lucide="activity" style="color:var(--success)"></i> System
+                                Activity</div>
+                        </div>
+                        <div class="activity-feed" id="activityFeed">
+                            <!-- Logs here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        </div>
+        </div>
+
+        <!-- LICENSES TAB -->
+        <div class="content" id="licensesTab" style="display: none;">
+            <div class="generator-card">
+                <h2 style="margin-bottom: 24px;">License Forge</h2>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Target Module</label>
+                        <div class="custom-select" id="genModuleContainer">
+                            <div class="select-trigger" id="genModuleLabel">Select Module</div>
+                            <div class="select-options" id="genModuleOptions"></div>
+                            <input type="hidden" id="genModule">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Validity (Days)</label>
+                        <div class="stepper-container">
+                            <div class="stepper-btn minus" onclick="stepUpdate('genDays', -1)"><i data-lucide="minus"
+                                    style="width:14px;"></i></div>
+                            <input type="number" id="genDays" value="30">
+                            <div class="stepper-btn plus" onclick="stepUpdate('genDays', 1)"><i data-lucide="plus"
+                                    style="width:14px;"></i></div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Device Limit (HWID)</label>
+                        <div class="stepper-container">
+                            <div class="stepper-btn minus" onclick="stepUpdate('genLimit', -1)"><i data-lucide="minus"
+                                    style="width:14px;"></i></div>
+                            <input type="number" id="genLimit" value="1">
+                            <div class="stepper-btn plus" onclick="stepUpdate('genLimit', 1)"><i data-lucide="plus"
+                                    style="width:14px;"></i></div>
+                        </div>
+                    </div>
+                    <div class="form-group" style="display: flex; align-items: flex-end;">
+                        <button class="btn-master" onclick="forgeLicense()">Generate License</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="vault-container">
+                <div
+                    style="padding: 24px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between;">
+                    <h3>License Repository</h3>
+                    <p id="vaultCount" style="color: var(--text-dim); font-size: 13px;"></p>
+                </div>
+                <table class="vault-table">
+                    <thead>
+                        <tr>
+                            <th>License Key</th>
+                            <th>Module</th>
+                            <th>Devices</th>
+                            <th>Expiry</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="vaultBody"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- USERS TAB -->
+        <div class="content" id="usersTab" style="display: none;">
+            <div class="section-header">
+                <h2>User Database (Device Registry)</h2>
+                <div class="line"></div>
+            </div>
+
+            <div class="search-container">
+                <i data-lucide="search" style="width: 18px;"></i>
+                <input type="text" id="userSearch" placeholder="Search devices by HWID, Name or GPU..."
+                    onkeyup="filterUsers(this.value)">
+            </div>
+
+            <div class="vault-container">
+                <table class="vault-table">
+                    <thead>
+                        <tr>
+                            <th>Device Metadata</th>
+                            <th>License Key</th>
+                            <th>Current Module</th>
+                            <th>Ownership</th>
+                            <th>Status</th>
+                            <th>First Seen</th>
+                            <th style="text-align: right;">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="usersTableBody">
+                        <tr>
+                            <td colspan="5" style="text-align:center; padding:40px; color:var(--text-dim);">Scanning for
+                                registered devices...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- MODULES TAB -->
+        <div class="content" id="modulesTab" style="display: none;">
+            <div class="generator-card" style="margin-bottom: 48px;">
+                <h2 style="margin-bottom: 24px; display: flex; align-items: center; gap: 12px;">
+                    <i data-lucide="plus-circle" style="color: var(--accent);"></i> Create New Module
+                </h2>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Module Display Name</label>
+                        <input type="text" id="newModName" placeholder="e.g. Premium Broadcaster">
+                    </div>
+                    <div class="form-group">
+                        <label>Description</label>
+                        <input type="text" id="newModDesc" placeholder="Brief functionality summary">
+                    </div>
+                    <div class="form-group">
+                        <label>Category Name</label>
+                        <input type="text" id="newModCat" placeholder="e.g. Broadcast Modules">
+                    </div>
+                </div>
+                <button class="btn-master" onclick="createModule()">Register Module Product</button>
+            </div>
+
+            <div class="search-container">
+                <i data-lucide="search"></i>
+                <input type="text" id="moduleSearch" placeholder="Search modules by name..."
+                    oninput="filterModules(this.value)">
+            </div>
+
+            <div id="categoriesList"></div>
+        </div>
+
+        <!-- VERSIONS TAB -->
+        <div class="content" id="versionsTab" style="display: none;">
+            <div class="section-header">
+                <h2>Version Control Center</h2>
+                <div class="line"></div>
+            </div>
+
+            <div class="search-container">
+                <i data-lucide="search"></i>
+                <input type="text" id="versionSearch" placeholder="Search bots to update..."
+                    oninput="filterVersions(this.value)">
+            </div>
+
+            <div id="versionsGrid" class="module-grid">
+                <!-- Version Cards Injected Here -->
+            </div>
+        </div>
+
+        <!-- BLACKLIST TAB -->
+        <div class="content" id="blacklistTab" style="display: none;">
+            <div class="section-header">
+                <h2>Banned Devices (HWID)</h2>
+                <div class="line"></div>
+                <button
+                    onclick="document.getElementById('modalOverlay').style.display='flex'; document.getElementById('banModal').style.display='block'; document.getElementById('newKeyModal').style.display='none';"
+                    style="background: var(--danger); color: white; padding: 12px 24px; border-radius: 12px; border: none; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 8px;">
+                    <i data-lucide="shield-off" style="width: 18px;"></i> Ban Device
+                </button>
+            </div>
+
+            <div class="search-container">
+                <i data-lucide="search" style="width: 18px;"></i>
+                <input type="text" id="blacklistSearch" placeholder="Search by HWID or Reason..."
+                    onkeyup="loadBlacklist()">
+            </div>
+
+            <div class="vault-container">
+                <table class="vault-table">
+                    <thead>
+                        <tr>
+                            <th>HWID</th>
+                            <th>Reason</th>
+                            <th>Banned By</th>
+                            <th>Banned At</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="blacklistTableBody">
+                        <tr>
+                            <td colspan="5" style="text-align:center;">Loading...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- LOGS TAB -->
+        <div class="content" id="logsTab" style="display: none;">
+            <div class="section-header">
+                <h2>System Activity Logs</h2>
+                <div class="line"></div>
+            </div>
+
+            <div class="generator-card" style="margin-bottom: 32px;">
+                <div class="form-grid" style="grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin-bottom: 0;">
+                    <div class="form-group" style="margin-bottom: 0;">
+                        <label>Category</label>
+                        <div class="custom-select" id="logCatContainer" onclick="this.classList.toggle('active')">
+                            <div class="select-trigger" id="logCatLabel">All Categories</div>
+                            <div class="select-options">
+                                <div class="option-item"
+                                    onclick="event.stopPropagation(); filterLogs('category', 'All'); this.closest('.custom-select').classList.remove('active')">
+                                    All Categories</div>
+                                <div class="option-item"
+                                    onclick="event.stopPropagation(); filterLogs('category', 'Auth'); this.closest('.custom-select').classList.remove('active')">
+                                    Auth</div>
+                                <div class="option-item"
+                                    onclick="event.stopPropagation(); filterLogs('category', 'License'); this.closest('.custom-select').classList.remove('active')">
+                                    License</div>
+                                <div class="option-item"
+                                    onclick="event.stopPropagation(); filterLogs('category', 'Module'); this.closest('.custom-select').classList.remove('active')">
+                                    Module</div>
+                                <div class="option-item"
+                                    onclick="event.stopPropagation(); filterLogs('category', 'Admin'); this.closest('.custom-select').classList.remove('active')">
+                                    Admin</div>
+                                <div class="option-item"
+                                    onclick="event.stopPropagation(); filterLogs('category', 'System'); this.closest('.custom-select').classList.remove('active')">
+                                    System</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group" style="margin-bottom: 0;">
+                        <label>Search User/Details</label>
+                        <input type="text" id="logSearch" placeholder="Filter by username or details..."
+                            onchange="filterLogs('search', this.value)">
+                    </div>
+                    <div class="form-group" style="margin-bottom: 0; display:flex; align-items:flex-end;">
+                        <button class="btn-master" onclick="loadSystemLogs()">Refresh Logs</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="widget-card">
+                <div class="activity-feed" id="fullLogFeed" style="max-height: 600px;">
+                    <!-- Logs will be loaded here -->
+                    <p style="text-align:center; padding:40px; color:var(--text-dim);">Loading system records...</p>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- SETTINGS TAB -->
+        <div class="content" id="settingsTab" style="display: none;">
+            <div class="section-header">
+                <h2>Administrator Control</h2>
+                <div class="line"></div>
+            </div>
+
+            <div class="generator-card" style="margin-bottom: 32px;">
+                <h3 style="margin-bottom: 16px; display: flex; align-items: center; gap: 10px;">
+                    <i data-lucide="user-plus" style="color: var(--accent);"></i> Create New Admin
+                </h3>
+                <div class="form-grid" style="grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin-bottom: 0;">
+                    <div class="form-group" style="margin-bottom: 0;">
+                        <label>Username</label>
+                        <input type="text" id="newAdminUser" placeholder="Enter username">
+                    </div>
+                    <div class="form-group" style="margin-bottom: 0;">
+                        <label>Password</label>
+                        <input type="password" id="newAdminPass" placeholder="Enter password">
+                    </div>
+                    <div class="form-group" style="margin-bottom: 0; display: flex; align-items: flex-end;">
+                        <button class="btn-master" onclick="createNewAdmin()">Create Admin</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="generator-card">
+                <p style="color: var(--text-dim); margin-bottom: 24px;">Manage system access and approve new
+                    administrator requests.</p>
+                <div class="nested-vault" style="max-height: none; overflow: visible;">
+                    <table class="vault-table">
+                        <thead>
+                            <tr>
+                                <th>Username</th>
+                                <th>Role</th>
+                                <th>Status</th>
+                                <th>Last Login</th>
+                                <th style="text-align: right;">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="adminListBody">
+                            <tr>
+                                <td colspan="5" style="text-align:center; padding:40px;">Loading authority records...
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div id="modalOverlay" onclick="closeModal()">
+        <div class="modal" onclick="event.stopPropagation()">
+            <div id="modalContent"></div>
+
+            <!-- BAN DEVICE MODAL -->
+            <div id="banModal" style="display: none;">
+                <div class="section-header">
+                    <h2>Ban Device</h2>
+                    <div class="line"></div>
+                    <div class="icon-btn"
+                        onclick="document.getElementById('modalOverlay').style.display='none'; document.getElementById('banModal').style.display='none';">
+                        <i data-lucide="x"></i>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Hardware ID (HWID)</label>
+                    <input type="text" id="banHwid" placeholder="Enter user HWID here...">
+                </div>
+                <div class="form-group">
+                    <label>Reason</label>
+                    <input type="text" id="banReason" placeholder="Why are you banning this user?">
+                </div>
+                <button class="btn-master" style="background: var(--danger); color: white;" onclick="submitBan()">
+                    <i data-lucide="gavel"
+                        style="width: 18px; display:inline-block; vertical-align:middle; margin-right:8px;"></i> BAN
+                    DEVICE
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div id="toast" class="toast"></div>
+
+    <script>
+        let adminUser = '';
+        let adminPassword = '';
+        let currentUserRole = '';
+        let allModules = [];
+
+        // Simple encryption/decryption to hide data in localStorage
+        function enc(str) {
+            return btoa(encodeURIComponent(str).split('').map((c, i) =>
+                String.fromCharCode(c.charCodeAt(0) ^ (i % 255))
+            ).join(''));
+        }
+
+        function dec(str) {
+            try {
+                return decodeURIComponent(atob(str).split('').map((c, i) =>
+                    String.fromCharCode(c.charCodeAt(0) ^ (i % 255))
+                ).join(''));
+            } catch (e) {
+                return '';
+            }
+        }
+
+        function showRequestForm() {
+            document.getElementById('loginForm').style.display = 'none';
+            document.getElementById('requestForm').style.display = 'block';
+        }
+
+        function showLoginForm() {
+            document.getElementById('requestForm').style.display = 'none';
+            document.getElementById('loginForm').style.display = 'block';
+        }
+
+        function showTab(tab, el) {
+            document.querySelectorAll('.content').forEach(c => c.style.display = 'none');
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+            document.getElementById(tab + 'Tab').style.display = 'block';
+            if (el) el.classList.add('active');
+            document.getElementById('tabTitle').textContent = tab.charAt(0).toUpperCase() + tab.slice(1);
+        }
+
+        async function submitRequest() {
+            const username = document.getElementById('reqUser').value.trim();
+            const password = document.getElementById('reqPass').value;
+
+            if (!username || !password) {
+                return showToast("All fields required");
+            }
+
+            if (username.length < 3) {
+                return showToast("Username must be at least 3 characters");
+            }
+
+            if (password.length < 6) {
+                return showToast("Password must be at least 6 characters");
+            }
+
+            const res = await fetch('/api/admin/request', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username, password })
+            });
+            const data = await res.json();
+
+            if (data.success) {
+                showToast("Request Submitted! Wait for approval.");
+                document.getElementById('reqUser').value = '';
+                document.getElementById('reqPass').value = '';
+                showLoginForm();
+            } else {
+                showToast(data.error || data.message || "Request failed");
+            }
+        }
+
+        function togglePass(show) {
+            const passInput = document.getElementById('adminPass');
+            if (passInput) passInput.type = show ? 'text' : 'password';
+        }
+
+        function checkPassInput(input) {
+            const toggle = document.getElementById('eyeToggle');
+            if (toggle) {
+                toggle.style.display = input.value.length > 0 ? 'block' : 'none';
+                if (input.value.length === 0) togglePass(false);
+            }
+        }
+
+        // Multi-Select Hub
+        function setupCustomSelects() {
+            document.addEventListener('click', (e) => {
+                if (!e.target.closest('.custom-select')) {
+                    document.querySelectorAll('.custom-select').forEach(s => s.classList.remove('active'));
+                }
+            });
+        }
+
+        function stepUpdate(id, delta) {
+            const input = document.getElementById(id);
+            let val = parseInt(input.value) || 0;
+            val = Math.max(1, val + delta);
+            input.value = val;
+        }
+
+        /* Custom Date Picker Logic */
+        let currentCalendarDate = new Date();
+        function toggleDatePicker(id) {
+            const container = document.getElementById(id + 'Container');
+            const isActive = container.classList.contains('active');
+            document.querySelectorAll('.date-picker-container').forEach(c => c.classList.remove('active'));
+            if (!isActive) {
+                container.classList.add('active');
+                renderCalendar(id, new Date(document.getElementById(id).value));
+            }
+        }
+
+        function renderCalendar(id, date) {
+            const dropdown = document.getElementById(id + 'Calendar');
+            const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+
+            const month = date.getMonth();
+            const year = date.getFullYear();
+
+            const firstDay = new Date(year, month, 1).getDay();
+            const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+            let html = `
+                <div class="calendar-header">
+                    <div class="calendar-btn" onclick="event.stopPropagation(); changeMonth('${id}', -1)"><i data-lucide="chevron-left" style="width:16px;"></i></div>
+                    <div style="font-weight:700; font-size:14px; cursor:pointer;" onclick="event.stopPropagation(); renderYearView('${id}', ${year})">${monthNames[month]} ${year}</div>
+                    <div class="calendar-btn" onclick="event.stopPropagation(); changeMonth('${id}', 1)"><i data-lucide="chevron-right" style="width:16px;"></i></div>
+                </div>
+                <div class="calendar-grid">
+                    <div class="calendar-day-name">Su</div><div class="calendar-day-name">Mo</div><div class="calendar-day-name">Tu</div>
+                    <div class="calendar-day-name">We</div><div class="calendar-day-name">Th</div><div class="calendar-day-name">Fr</div><div class="calendar-day-name">Sa</div>
+            `;
+
+            for (let i = 0; i < firstDay; i++) html += '<div class="calendar-day empty"></div>';
+
+            const currentSelected = document.getElementById(id).value;
+            for (let d = 1; d <= daysInMonth; d++) {
+                const dStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+                html += `<div class="calendar-day ${dStr === currentSelected ? 'selected' : ''}" onclick="event.stopPropagation(); selectDate('${id}', '${dStr}')">${d}</div>`;
+            }
+
+            dropdown.innerHTML = html + '</div>';
+            lucide.createIcons();
+        }
+
+        function renderYearView(id, currentYear) {
+            const dropdown = document.getElementById(id + 'Calendar');
+            const startYear = currentYear - 7;
+
+            let html = `
+                <div class="calendar-header">
+                    <div class="calendar-btn" onclick="event.stopPropagation(); renderYearView('${id}', ${currentYear - 12})"><i data-lucide="chevron-left" style="width:16px;"></i></div>
+                    <div style="font-weight:700; font-size:14px;">Select Year</div>
+                    <div class="calendar-btn" onclick="event.stopPropagation(); renderYearView('${id}', ${currentYear + 12})"><i data-lucide="chevron-right" style="width:16px;"></i></div>
+                </div>
+                <div class="calendar-year-grid">
+            `;
+
+            for (let i = 0; i < 12; i++) {
+                const year = startYear + i;
+                const isSelected = year === new Date(document.getElementById(id).value).getFullYear();
+                html += `<div class="calendar-year-item ${isSelected ? 'selected' : ''}" onclick="event.stopPropagation(); selectYear('${id}', ${year})">${year}</div>`;
+            }
+
+            dropdown.innerHTML = html + '</div>';
+            lucide.createIcons();
+        }
+
+        function selectYear(id, year) {
+            currentCalendarDate.setFullYear(year);
+            renderCalendar(id, currentCalendarDate);
+        }
+
+        function changeMonth(id, delta) {
+            currentCalendarDate.setMonth(currentCalendarDate.getMonth() + delta);
+            renderCalendar(id, currentCalendarDate);
+        }
+
+        function selectDate(id, dateStr) {
+            document.getElementById(id).value = dateStr;
+            document.getElementById(id + 'Display').textContent = new Date(dateStr).toLocaleDateString();
+            document.getElementById(id + 'Container').classList.remove('active');
+        }
+
+        function setupCustomSelects() {
+            document.addEventListener('click', (e) => {
+                if (!e.target.closest('.custom-select')) {
+                    document.querySelectorAll('.custom-select').forEach(s => s.classList.remove('active'));
+                }
+                if (!e.target.closest('.date-picker-container')) {
+                    document.querySelectorAll('.date-picker-container').forEach(c => c.classList.remove('active'));
+                }
+            });
+        }
+
+        function updateCustomSelect(id, options, currentVal, onChange) {
+            const container = document.getElementById(id + 'Container');
+            const label = document.getElementById(id + 'Label');
+            const optionsDiv = document.getElementById(id + 'Options');
+            const hiddenInput = document.getElementById(id);
+
+            // Toggle only on trigger click
+            label.onclick = (e) => {
+                e.stopPropagation();
+                const isActive = container.classList.contains('active');
+                document.querySelectorAll('.custom-select').forEach(s => s.classList.remove('active'));
+                if (!isActive) container.classList.add('active');
+            };
+
+            optionsDiv.innerHTML = options.map(opt => {
+                const isSelected = opt.value == currentVal;
+                // Create a temporary element to hold the onclick to avoid string interpolation issues
+                return `<div class="option-item ${isSelected ? 'selected' : ''}" 
+                             data-value="${opt.value}" data-text="${opt.text}">
+                            ${opt.text}
+                        </div>`;
+            }).join('');
+
+            // Add click listeners to options
+            optionsDiv.querySelectorAll('.option-item').forEach(item => {
+                item.onclick = (e) => {
+                    const val = item.getAttribute('data-value');
+                    const text = item.getAttribute('data-text');
+                    selectOption(id, val, text, onChange);
+                };
+            });
+
+            const selected = options.find(o => o.value == currentVal) || options[0];
+            if (selected) {
+                hiddenInput.value = selected.value;
+                label.innerHTML = `<span>${selected.text}</span><i data-lucide="chevron-down" style="width:16px; color:var(--text-dim);"></i>`;
+                lucide.createIcons();
+            }
+        }
+
+        function selectOption(id, val, text, onChange) {
+            document.getElementById(id).value = val;
+            document.getElementById(id + 'Label').innerHTML = `<span>${text}</span><i data-lucide="chevron-down" style="width:16px; color:var(--text-dim);"></i>`;
+            lucide.createIcons();
+            document.getElementById(id + 'Container').classList.remove('active');
+            if (onChange) onChange(val);
+        }
+
+        async function doLogin() {
+            // This function is now deprecated in dashboard.html as login is separate.
+            // But we keep it to prevent potential errors if still called.
+            window.location.href = '/login';
+        }
+
+        async function logout() {
+            localStorage.removeItem('adminPassword');
+            localStorage.removeItem('admin_key');
+            localStorage.removeItem('xee_k');
+            await fetch('/api/auth/logout', { method: 'POST', credentials: 'include' });
+            window.location.href = '/login';
+        }
+
+
+
+        function getNextVersion(v) {
+            if (!v) return '1.0.0';
+            const parts = v.split('.');
+            if (parts.length > 0) {
+                let last = parseInt(parts[parts.length - 1]);
+                if (!isNaN(last)) {
+                    parts[parts.length - 1] = last + 1;
+                    return parts.join('.');
+                }
+            }
+            return v;
+        }
+
+        async function loadVersions() {
+            const grid = document.getElementById('versionsGrid');
+            if (!grid) return;
+
+            // Fetch fresh data from API to ensure we have the latest database versions
+            try {
+                const data = await apiFetch('/api/stats');
+                if (data && data.success && data.raw_modules) {
+                    const flattened = [];
+                    data.raw_modules.forEach(c => {
+                        if (c.bots) {
+                            c.bots.forEach(b => {
+                                b.category_name = b.category_name || c.name;
+                                flattened.push(b);
+                            });
+                        }
+                    });
+                    allModules = flattened;
+                }
+            } catch (e) {
+                console.error("Failed to fetch fresh module data", e);
+            }
+
+            grid.innerHTML = allModules.map(m => {
+                const ver = m.version || '1.0.0';
+                const mid = m.module_id || m.id;
+                return `
+                <div class="module-card">
+                    <div style="display:flex; justify-content:space-between; align-items:start; margin-bottom:16px;">
+                        <div>
+                            <div class="badge badge-new" style="margin-bottom:8px;">${m.category_name}</div>
+                            <h3 class="module-name" style="font-size:20px;">${m.name}</h3>
+                            <p style="color:var(--text-dim); font-size:13px; font-family:monospace;">ID: ${mid}</p>
+                        </div>
+                        <div class="badge badge-active" style="font-size:14px;">v${ver}</div>
+                    </div>
+                    
+                    <div class="form-group" style="margin-bottom:16px;">
+                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                            <label style="margin:0;">New Version Number</label>
+                            <span style="font-size:11px; color:var(--text-dim);">Current: <b style="color:var(--accent)">${ver}</b></span>
+                        </div>
+                        <div style="position:relative; display:flex; align-items:center;">
+                            <input type="text" id="v_ver_${mid}" value="${getNextVersion(ver)}" placeholder="e.g. 1.0.1" style="padding-right:60px;">
+                            <div class="icon-btn" onclick="incrementVersion('${mid}')" data-tooltip="Auto Increment (+1)" style="position:absolute; right:10px; width:35px; height:35px; background:var(--surface-accent); border:1px solid var(--border); border-radius:10px; display:flex; align-items:center; justify-content:center; cursor:pointer;">
+                                <i data-lucide="plus" style="width:16px; color:var(--accent);"></i>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group" style="margin-bottom:24px;">
+                        <label>Update File (.py/.exe)</label>
+                        <div class="file-upload-wrapper" onclick="document.getElementById('v_file_${mid}').click()">
+                            <i data-lucide="file-up" style="width:24px; height:24px; color:var(--accent);"></i>
+                            <span id="v_name_${mid}" style="color:var(--text-dim); font-size:14px; font-weight:500;">Click to select or drop file</span>
+                            <input type="file" id="v_file_${mid}" accept=".py,.exe" style="display:none;" onchange="handleFileSelect('${mid}', this)">
+                        </div>
+                    </div>
+                    
+                    <button class="btn-master" onclick="pushUpdate('${mid}')">
+                        <i data-lucide="upload-cloud" style="width:18px; margin-right:8px; vertical-align:text-bottom;"></i>
+                        Push Update
+                    </button>
+
+                    <div id="p_container_${mid}" class="progress-container">
+                        <div id="p_fill_${mid}" class="progress-bar-fill"></div>
+                    </div>
+                    <div id="p_text_${mid}" class="progress-text">0% Uploaded</div>
+                    
+                    ${m.download_url ? `<div style="margin-top:16px; font-size:12px; color:var(--text-dim); word-break:break-all;">Latest: <a href="${m.download_url}" target="_blank" style="color:var(--accent);">${m.download_url.split('/').pop()}</a></div>` : ''}
+                </div>
+                `;
+            }).join('');
+            lucide.createIcons();
+        }
+
+        window.handleFileSelect = function (moduleId, input) {
+            const label = document.getElementById(`v_name_${moduleId}`);
+            if (input.files && input.files[0]) {
+                const file = input.files[0];
+                label.textContent = file.name;
+                label.style.color = 'var(--accent)';
+            } else {
+                label.textContent = 'Click to select or drop file';
+                label.style.color = 'var(--text-dim)';
+            }
+        };
+
+        window.incrementVersion = function (moduleId) {
+            const input = document.getElementById(`v_ver_${moduleId}`);
+            let v = input.value.trim();
+            // Match pattern like 1.0.0 or 1.0
+            const parts = v.split('.');
+            if (parts.length > 0) {
+                let last = parseInt(parts[parts.length - 1]);
+                if (!isNaN(last)) {
+                    parts[parts.length - 1] = last + 1;
+                    input.value = parts.join('.');
+                    showToast("Version Incremented!");
+                }
+            }
+        };
+
+        async function pushUpdate(moduleId) {
+            const verInput = document.getElementById(`v_ver_${moduleId}`);
+            const fileInput = document.getElementById(`v_file_${moduleId}`);
+            const pContainer = document.getElementById(`p_container_${moduleId}`);
+            const pFill = document.getElementById(`p_fill_${moduleId}`);
+            const pText = document.getElementById(`p_text_${moduleId}`);
+
+            const version = verInput.value.trim();
+            const file = fileInput.files[0];
+
+            if (!version) return showToast("Version number required");
+            if (!file) return showToast("Please select a file to upload");
+
+            const formData = new FormData();
+            formData.append('username', adminUser);
+            formData.append('password', adminPassword);
+            formData.append('module_id', moduleId);
+            formData.append('version', version);
+            formData.append('file', file);
+
+            // Reset and show progress UI
+            pContainer.style.display = 'block';
+            pText.style.display = 'block';
+            pFill.style.width = '0%';
+            pText.textContent = '0% Uploaded';
+
+            const xhr = new XMLHttpRequest();
+            xhr.open('POST', '/api/modules/upload', true);
+            xhr.withCredentials = true; // Add this for credentials
+
+            xhr.upload.onprogress = (e) => {
+                if (e.lengthComputable) {
+                    const percent = Math.round((e.loaded / e.total) * 100);
+                    pFill.style.width = percent + '%';
+                    if (percent === 100) {
+                        pText.textContent = '100% - Finalizing & Saving...';
+                        pFill.style.background = 'var(--success)';
+                        pFill.style.boxShadow = '0 0 15px var(--success)';
+                    } else {
+                        pText.textContent = percent + '% Uploaded';
+                    }
+                }
+            };
+
+            xhr.onload = () => {
+                try {
+                    const data = JSON.parse(xhr.responseText);
+                    if (data.success) {
+                        pText.textContent = '✅ Saved Successfully!';
+                        showToast("Update Pushed Successfully!");
+
+                        // Reset file label
+                        const label = document.getElementById(`v_name_${moduleId}`);
+                        if (label) {
+                            label.textContent = 'Click to select or drop file';
+                            label.style.color = 'var(--text-dim)';
+                        }
+
+                        setTimeout(() => {
+                            pContainer.style.display = 'none';
+                            pText.style.display = 'none';
+                            pFill.style.background = 'var(--accent)'; // Reset color
+                            refresh();
+                            setTimeout(loadVersions, 500);
+                        }, 1500);
+                    } else {
+                        showToast(data.error || "Upload failed");
+                        pContainer.style.display = 'none';
+                        pText.style.display = 'none';
+                    }
+                } catch (e) {
+                    showToast("Server response error");
+                }
+            };
+
+            xhr.onerror = () => {
+                showToast("Connection error during upload");
+                pContainer.style.display = 'none';
+                pText.style.display = 'none';
+            };
+
+            xhr.send(formData);
+        }
+
+        function filterVersions(query) {
+            query = query.toLowerCase();
+            document.querySelectorAll('#versionsGrid .module-card').forEach(card => {
+                const name = card.querySelector('.module-name').innerText.toLowerCase();
+                const id = card.querySelector('p').innerText.toLowerCase();
+                if (name.includes(query) || id.includes(query)) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+
+        async function refreshAdmins() {
+            const data = await apiFetch('/api/admin/list');
+            if (data && data.success) {
+                renderAdmins(data.admins);
+            }
+        }
+
+        function renderAdmins(admins) {
+            const list = document.getElementById('adminListBody');
+            if (!list) return;
+
+            const myRole = (currentUserRole || '').toLowerCase();
+            const isMeHighAdmin = ['owner', 'high admin'].includes(myRole);
+
+            list.innerHTML = admins.map(a => {
+                let roleLower = (a.role || '').toLowerCase();
+                let roleColor = roleLower === 'owner' ? '#f59e0b' : (roleLower === 'high admin' ? '#8b5cf6' : 'var(--text-dim)');
+
+                // Role Picker Logic
+                let roleDisplay = `<span style="color:${roleColor}; font-weight:700;">${a.role || 'Admin'}</span>`;
+
+                // Only allow editing if I am High Admin, target is NOT Owner, and target is NOT myself
+                if (isMeHighAdmin && roleLower !== 'owner' && a.username !== adminUser) {
+                    roleDisplay = `
+                        <div class="custom-select" style="width:160px; margin:0; cursor:pointer; position:relative;" onclick="event.stopPropagation(); this.classList.toggle('active')">
+                            <div class="select-trigger" style="padding:10px 14px; font-size:13px; min-height:0; height:auto; background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.08); border-radius:10px; display:flex; align-items:center; justify-content:space-between;">
+                                <span style="color:${roleColor}; text-transform:capitalize; font-weight:600;">${a.role || 'Admin'}</span>
+                                <i data-lucide="chevron-down" style="width:14px; color:var(--text-dim);"></i>
+                            </div>
+                            <div class="select-options" style="display:none; position:absolute; top:calc(100% + 6px); left:0; width:100%; background:rgba(18,18,18,0.98); backdrop-filter:blur(20px); border:1px solid rgba(255,255,255,0.1); border-radius:12px; box-shadow:0 8px 24px rgba(0,0,0,0.4); z-index:999999; overflow:hidden;">
+                                <div class="option-item" onclick="changeAdminRole('${a.username}', 'Admin')" style="padding:12px 14px; font-size:13px; color:var(--text-secondary); cursor:pointer; border-bottom:1px solid rgba(255,255,255,0.05);">
+                                    <div style="font-weight:600; margin-bottom:2px;">Admin</div>
+                                    <div style="font-size:11px; color:var(--text-dim);">Key Generation Only</div>
+                                </div>
+                                <div class="option-item" onclick="changeAdminRole('${a.username}', 'High Admin')" style="padding:12px 14px; font-size:13px; color:var(--text-secondary); cursor:pointer;">
+                                    <div style="font-weight:600; margin-bottom:2px; color:#8b5cf6;">High Admin</div>
+                                    <div style="font-size:11px; color:var(--text-dim);">Full Control</div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }
+
+                let statusBadgeClass = 'badge-disabled';
+                if (a.status === 'active') statusBadgeClass = 'badge-active';
+                else if (a.status === 'pending') statusBadgeClass = 'badge-new';
+
+                let actions = '';
+                if (isMeHighAdmin && roleLower !== 'owner') {
+                    if (a.status === 'pending') {
+                        actions += `<button class="icon-btn" style="color:var(--success)" onclick="manageAdmin('${a.username}', 'approve')" data-tooltip="Approve"><i data-lucide="check-circle" style="width:16px;"></i></button>`;
+                    }
+                    if (a.status === 'active') {
+                        actions += `<button class="icon-btn" style="color:var(--text-dim)" onclick="manageAdmin('${a.username}', 'disable')" data-tooltip="Disable"><i data-lucide="slash" style="width:16px;"></i></button>`;
+                    }
+                    if (a.status === 'disabled') {
+                        actions += `<button class="icon-btn" style="color:var(--success)" onclick="manageAdmin('${a.username}', 'approve')" data-tooltip="Enable"><i data-lucide="check-circle" style="width:16px;"></i></button>`;
+                    }
+                    actions += `<button class="icon-btn" style="color:var(--danger)" onclick="manageAdmin('${a.username}', 'delete')" data-tooltip="Delete"><i data-lucide="trash-2" style="width:16px;"></i></button>`;
+                }
+
+                const lastLogin = a.last_login ? new Date(a.last_login).toLocaleString() : 'Never';
+
+                return `
+                <tr>
+                    <td style="font-weight:700;">
+                        <div style="display:flex; align-items:center; gap:10px;">
+                            <img src="${a.discord_avatar || 'https://cdn.discordapp.com/embed/avatars/0.png'}" style="width:24px; height:24px; border-radius:6px; border:1px solid rgba(255,255,255,0.1);">
+                            <div>
+                                <div style="font-size:13px;">${a.discord_username || a.username}</div>
+                                <div style="font-size:10px; color:var(--text-dim); font-weight:400;">${a.username}</div>
+                            </div>
+                        </div>
+                    </td>
+                    <td>${roleDisplay}</td>
+                    <td><span class="badge ${statusBadgeClass}">${a.status}</span></td>
+                    <td style="font-size:12px; color:var(--text-dim);">${lastLogin}</td>
+                    <td style="text-align: right;">
+                        <div style="display: flex; gap: 8px; justify-content: flex-end;">
+                            ${actions}
+                        </div>
+                    </td>
+                </tr>
+                `;
+            }).join('');
+            lucide.createIcons();
+        }
+
+        async function changeAdminRole(target, role) {
+            const data = await apiFetch('/api/admin/role', { target_user: target, new_role: role });
+            if (data && data.success) {
+                showToast(`Role updated to ${role}`);
+                refreshAdmins();
+            } else {
+                showToast("Failed to update role");
+            }
+        }
+
+        async function manageAdmin(target_username, action) {
+            showConfirm(`Confirm ${action} for <span style="color:white">${target_username}</span>?`, async () => {
+                const data = await apiFetch('/api/admin/manage', { target_username, action });
+                if (data && data.success) { showToast(`Admin ${action} successful`); refreshAdmins(); }
+                else showToast(data.error || data.message);
+            });
+        }
+
+        function impersonateUser(username) {
+            localStorage.setItem('impersonate_user', username);
+            window.location.href = '/overview';
+        }
+
+        async function apiFetch(url, body = {}) {
+            // Only redirect if effectively unauthorized (handled by 401 below)
+            // if (!adminUser) ... removed to support session auth
+
+            try {
+                // Construct payload
+                const payload = { ...body };
+                if (adminUser) payload.username = adminUser;
+                if (adminPassword) payload.password = adminPassword;
+
+                const res = await fetch(url, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    credentials: 'include',
+                    body: JSON.stringify(payload)
+                });
+                if (res.status === 401 || res.status === 403) {
+                    localStorage.removeItem('admin_key');
+                    localStorage.removeItem('adminPassword');
+                    window.location.href = '/login';
+                    return null;
+                }
+                const text = await res.text();
+                try {
+                    return JSON.parse(text);
+                } catch (e) {
+                    console.error("Non-JSON response:", text);
+                    return { success: false, error: "Server Error: " + (text.substring(0, 50) || "Empty response") };
+                }
+            } catch (e) {
+                console.error("Fetch Error:", e);
+                return { success: false, error: "Network Error" };
+            }
+        }
+
+        async function createNewAdmin() {
+            const newUser = document.getElementById('newAdminUser').value.trim();
+            const newPass = document.getElementById('newAdminPass').value;
+
+            if (!newUser || !newPass) {
+                showToast('Username and password are required');
+                return;
+            }
+
+            if (newPass.length < 6) {
+                showToast('Password must be at least 6 characters');
+                return;
+            }
+
+            const data = await apiFetch('/api/admin/create', {
+                new_username: newUser,
+                new_password: newPass
+            });
+
+            if (data && data.success) {
+                showToast('Admin created successfully');
+                document.getElementById('newAdminUser').value = '';
+                document.getElementById('newAdminPass').value = '';
+                refreshAdmins();
+            } else if (data) {
+                showToast(data.error || 'Failed to create admin');
+            }
+        }
+
+        async function init() {
+            refresh();
+            setInterval(refresh, 10000);
+            lucide.createIcons();
+        }
+
+        async function createModule() {
+            const name = document.getElementById('newModName').value;
+            const description = document.getElementById('newModDesc').value;
+            const category = document.getElementById('newModCat').value;
+            const bot_token = '';
+
+            if (!name || !category) return showToast("Name and Category are required");
+
+            const data = await apiFetch('/api/modules/create', { name, description, category, bot_token });
+            if (data && data.success) {
+                showToast("Module Registered!");
+                document.getElementById('newModName').value = '';
+                document.getElementById('newModDesc').value = '';
+                document.getElementById('newModCat').value = '';
+                refresh();
+            } else if (data) {
+                showToast(data.message || "Error creating module");
+            }
+        }
+
+
+        let lastData = null;
+
+        function filterModules(val) {
+            if (!lastData) return;
+            const query = val.toLowerCase();
+            const filtered = lastData.raw_modules.map(cat => ({
+                ...cat,
+                bots: cat.bots.filter(b => b.name.toLowerCase().includes(query))
+            })).filter(cat => cat.bots.length > 0);
+            renderModules(filtered, lastData.raw_licenses);
+        }
+
+        function renderModules(categories, licenses) {
+            allModules = [];
+            allModules = [];
+            categories.forEach(c => c.bots.forEach(b => {
+                b.category_name = c.name;
+                if (!b.module_id && b.id) b.module_id = b.id; // Fallback if module_id missing
+                allModules.push(b);
+            }));
+
+            // Update Generator UI
+            const moduleOptions = allModules.map(m => ({ value: m.id, text: m.name }));
+            updateCustomSelect('genModule', moduleOptions, document.getElementById('genModule').value || moduleOptions[0]?.value);
+
+            document.getElementById('categoriesList').innerHTML = categories.map(cat => `
+                <div class="section-header"><h2>${cat.name}</h2><div class="line"></div></div>
+                <div class="module-grid">
+                    ${cat.bots.map(b => {
+                const modLicenses = licenses.filter(l => l.module === b.id).sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+                const activeCount = modLicenses.filter(l => l.status === 'active').length;
+                return `
+                        <div class="module-card" style="grid-column: span 2;">
+                            <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:20px;">
+                                <div>
+                                    <div class="module-name" style="font-size:28px;">${b.name}</div>
+                                    <div class="module-desc">${b.description}</div>
+                                </div>
+                                <div style="display:flex; align-items:center; gap:16px;">
+
+                                    <div style="display:flex; gap:8px;">
+                                        <div class="icon-btn btn-delete" onclick="deleteModule('${b.id}', '${b.name}')" data-tooltip="Delete Module">
+                                            <i data-lucide="trash-2" style="width:18px;"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            ${modLicenses.length > 0 ? `
+                            <div class="search-container" style="margin-bottom:12px;">
+                                <i data-lucide="search" style="width:14px;"></i>
+                                <input type="text" placeholder="Filter module licenses..." style="padding:10px 10px 10px 40px; font-size:12px; border-radius:10px;" 
+                                    oninput="filterModuleVault('${b.id}', this.value)">
+                            </div>
+
+                            <div class="nested-vault">
+                                <table class="vault-table" style="font-size:12px;">
+                                    <tbody id="vault-${b.id}">
+                                        ${renderVaultRows(modLicenses)}
+                                    </tbody>
+                                </table>
+                            </div>
+                            ` : ''}
+                        </div>
+                    `}).join('')}
+                </div>
+            `).join('');
+            lucide.createIcons();
+        }
+
+        function quickForge(moduleId) {
+            showTab('licenses', document.querySelector('.nav-item[onclick*="licenses"]'));
+            const input = document.getElementById('genModule');
+            if (input) {
+                input.value = moduleId;
+                // Force label update if modules are already loaded
+                if (allModules && allModules.length > 0) {
+                    const mod = allModules.find(m => m.id == moduleId || m.module_id == moduleId);
+                    if (mod) {
+                        const label = document.getElementById('genModuleLabel');
+                        if (label) label.innerHTML = `<span>${mod.name}</span><i data-lucide="chevron-down" style="width:16px; color:var(--text-dim);"></i>`;
+                        lucide.createIcons();
+                    }
+                }
+            }
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            showToast("Module selected for forging");
+        }
+
+        async function deleteModule(moduleId, moduleName) {
+            showConfirm(`PERMANENTLY delete module <span style="color:white">${moduleName}</span>?<br><br>All keys will lose their module reference.`, async () => {
+                const data = await apiFetch('/api/modules/delete', { module_id: moduleId });
+                if (data && data.success) {
+                    showToast("Module purged from system");
+                    refresh();
+                } else if (data) {
+                    showToast("Error: " + data.message);
+                }
+            });
+        }
+
+        async function refresh() {
+            const data = await apiFetch('/api/stats');
+            if (!data || !data.success) return;
+
+            lastData = data;
+            currentUserRole = data.user_role || 'Client';
+
+            // Update Header
+            const userDisplay = document.getElementById('loggedInUser');
+            const roleDisplay = document.getElementById('userRole');
+            const avatarDisplay = document.getElementById('userAvatar');
+
+            if (userDisplay) userDisplay.textContent = data.discord_username || data.username || 'User';
+            if (roleDisplay) roleDisplay.textContent = currentUserRole;
+            if (avatarDisplay && data.discord_avatar) {
+                avatarDisplay.src = data.discord_avatar;
+            }
+
+            const roleLower = currentUserRole.toLowerCase();
+            if (currentUserRole === 'Client') {
+                window.location.href = '/overview';
+                return;
+            }
+
+            // Show Users tab only for Owner and High Admin
+            const navUsers = document.getElementById('nav-users');
+            if (navUsers) {
+                const canSeeUsers = (roleLower === 'owner' || roleLower === 'high admin');
+                navUsers.style.display = canSeeUsers ? 'flex' : 'none';
+            }
+
+            document.getElementById('stat-modules').textContent = data.total_modules;
+            document.getElementById('stat-active').textContent = data.active_licenses;
+
+            // Show/Hide Elements based on role
+            const isHighAdmin = ['owner', 'high admin', 'admin'].includes(roleLower);
+            document.querySelectorAll('.restricted-action').forEach(el => {
+                el.style.display = isHighAdmin ? 'flex' : 'none';
+            });
+
+            // Calc Load
+            const totalSlots = data.raw_licenses.reduce((acc, l) => acc + (l.hwid_limit || 1), 0);
+            const usedSlots = data.raw_licenses.reduce((acc, l) => acc + (l.hwids || []).length, 0);
+            const load = totalSlots > 0 ? Math.round((usedSlots / totalSlots) * 100) : 0;
+            document.getElementById('stat-load').textContent = load + "%";
+
+            renderOverview(data.bots, data.raw_licenses);
+            renderVault(data.raw_licenses);
+            renderModules(data.raw_modules, data.raw_licenses);
+            if (roleLower === 'owner') {
+                renderUsers(data.raw_licenses, data.authorized_hwids || []);
+            }
+        }
+
+        function renderOverview(bots, licenses) {
+            // Render Bots
+            const grid = document.getElementById('liveGrid');
+            if (Object.keys(bots).length === 0) {
+                grid.innerHTML = `<p style="color:var(--text-dim); text-align:center; padding:20px;">No active bot deployments.</p>`;
+            } else {
+                grid.innerHTML = Object.entries(bots).map(([id, b]) => `
+                    <div class="module-card" style="padding:20px; border-radius:18px;">
+                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+                            <span class="badge badge-active" style="font-size:10px;">ONLINE</span>
+                            <div class="icon-btn" style="width:28px; height:28px;" onclick="viewBot('${id}')"><i data-lucide="eye" style="width:14px;"></i></div>
+                        </div>
+                        <div style="font-weight:700; font-size:18px; margin-bottom:4px;">${b.name || id}</div>
+                        <p style="font-size:12px; color:var(--text-dim)">${b.server_count} Servers</p>
+                    </div>
+                `).join('');
+            }
+
+            // Render Activity
+            const logs = [];
+            licenses.forEach(l => {
+                (l.logs || []).forEach(log => {
+                    logs.push({ ...log, key: l.key, module: l.module });
+                });
+            });
+            logs.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+
+            const feed = document.getElementById('activityFeed');
+            feed.innerHTML = logs.slice(0, 20).map(log => {
+                let icon = 'info';
+                let color = 'var(--text-dim)';
+
+                if (log.message.includes("created")) { icon = 'plus-circle'; color = 'var(--accent)'; }
+                else if (log.message.includes("activated")) { icon = 'check-circle'; color = 'var(--success)'; }
+                else if (log.message.includes("expired")) { icon = 'clock'; color = 'var(--danger)'; }
+                else if (log.message.includes("registered")) { icon = 'smartphone'; color = '#f59e0b'; }
+
+                return `
+                <div class="activity-item">
+                    <div class="activity-icon" style="color:${color}"><i data-lucide="${icon}" style="width:18px;"></i></div>
+                    <div class="activity-content">
+                        <div class="activity-msg">
+                            ${log.message}
+                            <div style="font-size:11px; color:var(--text-dim); margin-top:2px;">Key: <span style="font-family:monospace">${log.key.substring(0, 8)}...</span></div>
+                        </div>
+                        <div class="activity-time">${new Date(log.timestamp).toLocaleString()}</div>
+                    </div>
+                </div>
+            `}).join('') || '<p style="color:var(--text-dim); text-align:center;">No recent activity.</p>';
+
+            // Render Expiring
+            const now = new Date();
+            const warningTime = new Date();
+            warningTime.setDate(now.getDate() + 7);
+
+            const expiring = licenses.filter(l => {
+                if (l.status !== 'active') return false;
+                const exp = new Date(l.expiry);
+                return exp > now && exp <= warningTime;
+            });
+
+            const expList = document.getElementById('expiryList');
+            expList.innerHTML = expiring.map(l => {
+                const daysLeft = Math.ceil((new Date(l.expiry) - now) / (1000 * 60 * 60 * 24));
+                return `
+                <div class="expiry-row">
+                    <div>
+                        <div style="font-family:monospace; font-weight:700; font-size:14px;">${l.key.substring(0, 16)}...</div>
+                        <div style="font-size:12px; color:var(--text-dim);">${l.module}</div>
+                    </div>
+                    <div style="text-align:right;">
+                        <div style="color:var(--danger); font-weight:700; font-size:14px;">${daysLeft} Days</div>
+                        <div style="font-size:11px; cursor:pointer; color:var(--accent); text-decoration:underline;" onclick="openEdit('${l.key}')">Renew</div>
+                    </div>
+                </div>
+            `}).join('') || '<p style="color:var(--text-dim); text-align:center; padding:10px;">No licenses expiring soon.</p>';
+
+
+        }
+
+        function filterModuleVault(moduleId, query) {
+            const modLicenses = lastData.raw_licenses.filter(l => l.module === moduleId);
+            const q = query.toLowerCase();
+            const filtered = modLicenses.filter(l => l.key.toLowerCase().includes(q) || l.status.toLowerCase().includes(q));
+            document.getElementById(`vault-${moduleId}`).innerHTML = renderVaultRows(filtered);
+            lucide.createIcons();
+        }
+
+        function renderVaultRows(licenses) {
+            if (licenses.length === 0) return `<tr><td colspan="6" style="text-align:center; color:var(--text-dim); padding:20px;">No licenses found</td></tr>`;
+            return licenses.map(l => {
+                let badgeClass = 'badge-disabled';
+                let statusLabel = l.status;
+                if (l.status === 'active') badgeClass = 'badge-active';
+                else if (l.status === 'new') badgeClass = 'badge-new';
+
+                const myRole = (currentUserRole || '').toLowerCase();
+                const isHighAdmin = ['owner', 'high admin', 'admin'].includes(myRole);
+                const actionButtons = isHighAdmin ? `
+                     <td style="display:flex; gap:6px;">
+                        <div class="icon-btn" style="width:28px; height:28px;" onclick="openLogs('${l.key}')">
+                            <i data-lucide="scroll-text" style="width:12px; height:12px;"></i>
+                        </div>
+                        <div class="icon-btn" style="width:28px; height:28px;" onclick="openEdit('${l.key}')">
+                            <i data-lucide="pencil" style="width:12px; height:12px;"></i>
+                        </div>
+                        <div class="icon-btn" style="width:28px; height:28px;" onclick="resetKey('${l.key}')">
+                            <i data-lucide="refresh-cw" style="width:12px; height:12px;"></i>
+                        </div>
+                        <div class="icon-btn btn-delete" style="width:28px; height:28px;" onclick="deleteLicense('${l.key}')">
+                            <i data-lucide="trash-2" style="width:12px; height:12px;"></i>
+                        </div>
+                    </td>
+                ` : `<td><span style="color:var(--text-dim); font-size:11px;">View Only</span></td>`;
+
+                return `
+                <tr>
+                    <td style="font-family:monospace; font-weight:700">${l.key}</td>
+                    <td>${(l.hwids || []).length} / ${l.hwid_limit || 1}</td>
+                    <td>${new Date(l.expiry).toLocaleDateString()}</td>
+                    <td><span class="badge ${badgeClass}" style="padding:2px 8px; font-size:9px;">${statusLabel}</span></td>
+                    ${actionButtons}
+                </tr>
+            `}).join('');
+        }
+
+        function renderVault(licenses) {
+            const sorted = [...licenses].sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+            document.getElementById('vaultCount').textContent = `${licenses.length} Total Records`;
+            document.getElementById('vaultBody').innerHTML = sorted.map(l => {
+                let badgeClass = 'badge-disabled';
+                let statusLabel = l.status;
+                if (l.status === 'active') badgeClass = 'badge-active';
+                else if (l.status === 'new') badgeClass = 'badge-new';
+
+                const myRole = (currentUserRole || '').toLowerCase();
+                const isHighAdmin = ['owner', 'high admin', 'admin'].includes(myRole);
+                const actionButtons = isHighAdmin ? `
+                    <div class="icon-btn" onclick="openLogs('${l.key}')" data-tooltip="Logs"><i data-lucide="scroll-text" style="width:16px; height:16px;"></i></div>
+                    <div class="icon-btn" onclick="openEdit('${l.key}')" data-tooltip="Edit"><i data-lucide="pencil" style="width:16px; height:16px;"></i></div>
+                    <div class="icon-btn" onclick="resetKey('${l.key}')" data-tooltip="Reset Devices"><i data-lucide="refresh-cw" style="width:16px; height:16px;"></i></div>
+                    <div class="icon-btn btn-delete" onclick="deleteLicense('${l.key}')" data-tooltip="Delete Permanent"><i data-lucide="trash-2" style="width:16px; height:16px;"></i></div>
+                ` : `
+                    <div class="icon-btn" onclick="openLogs('${l.key}')" data-tooltip="Logs"><i data-lucide="scroll-text" style="width:16px; height:16px;"></i></div>
+                `;
+
+                return `
+                <tr>
+                    <td style="font-family:monospace; font-weight:700">${l.key}</td>
+                    <td>${l.module.toUpperCase()}</td>
+                    <td>${(l.hwids || []).length} / ${l.hwid_limit || 1}</td>
+                    <td>${new Date(l.expiry).toLocaleDateString()}</td>
+                    <td><span class="badge ${badgeClass}">${statusLabel}</span></td>
+                    <td style="display:flex; gap:8px;">
+                        ${actionButtons}
+                    </td>
+                </tr>
+            `}).join('');
+            lucide.createIcons();
+        }
+
+        async function viewBot(id) {
+            const data = await apiFetch('/api/stats');
+            if (!data || !data.success) return;
+            const bot = data.bots[id];
+            if (!bot) return showToast("Instance data not found");
+
+            const content = `
+                <h2 style="margin-bottom:24px;">Instance: ${bot.name || id}</h2>
+                <div style="background:var(--surface-accent); padding:24px; border-radius:18px; margin-bottom:24px;">
+                    <div style="display:grid; grid-template-columns:1fr 1fr; gap:20px;">
+                        <div>
+                            <label>Status</label>
+                            <div style="font-size:18px; color:var(--success); font-weight:700;">ONLINE</div>
+                        </div>
+                        <div>
+                            <label>Active Servers</label>
+                            <div style="font-size:18px; font-weight:700;">${bot.server_count}</div>
+                        </div>
+                        <div style="grid-column:span 2;">
+                            <label>Internal Access Key</label>
+                            <div style="font-family:monospace; background:rgba(0,0,0,0.3); padding:10px; border-radius:8px; font-size:13px;">${bot.access_key || 'N/A'}</div>
+                        </div>
+                    </div>
+                </div>
+                <p style="color:var(--text-dim); font-size:13px; margin-bottom:12px;">Authorized Server Nodes:</p>
+                <div style="max-height:200px; overflow-y:auto; border:1px solid var(--border); border-radius:12px; padding:12px;">
+                    ${(bot.servers || []).map(s => `<div style="padding:4px 0; font-size:14px; border-bottom:1px solid rgba(255,255,255,0.05)">${s}</div>`).join('') || '<p style="color:white; font-size:12px;">No active node connections.</p>'}
+                </div>
+            `;
+            document.getElementById('modalContent').innerHTML = content;
+            document.getElementById('modalOverlay').style.display = 'flex';
+        }
+
+        async function forgeLicense() {
+            const module = document.getElementById('genModule').value;
+            const duration = document.getElementById('genDays').value;
+            const hwid_limit = document.getElementById('genLimit').value;
+
+            if (!module) return showToast("Please select a module first");
+
+            const data = await apiFetch('/api/license/generate', { module, duration, hwid_limit });
+            if (data && data.success) {
+                showToast("License Created: " + data.key);
+                refresh();
+            } else {
+                showToast(data.error || "Generation failed");
+            }
+        }
+
+        async function resetKey(key) {
+            showConfirm("Purge all authorized devices?", async () => {
+                const data = await apiFetch('/api/license/reset', { key });
+                if (data && data.success) {
+                    showToast("Hardware records cleared");
+                    refresh();
+                } else if (data) {
+                    showToast(data.error || "Reset failed");
+                }
+            });
+        }
+
+        async function openLogs(key) {
+            closeModal();
+            const data = await apiFetch('/api/stats');
+            if (!data || !data.success) return;
+            const item = data.raw_licenses.find(l => l.key === key);
+            const content = `
+               <h2 style="margin-bottom:24px;">Audit Log: ${key}</h2>
+               <div style="height:300px; overflow-y:auto; border:1px solid var(--border); border-radius:16px; padding:16px;">
+                   ${item.logs.map(log => `
+                       <div style="padding:12px 0; border-bottom:1px solid var(--border);">
+                           <p style="font-size:11px; color:var(--text-dim);">${new Date(log.timestamp).toLocaleString()}</p>
+                           <p style="font-size:14px;">${log.message}</p>
+                       </div>
+                   `).reverse().join('') || 'No events recorded.'}
+               </div>
+           `;
+            document.getElementById('modalContent').innerHTML = content;
+            document.getElementById('modalOverlay').style.display = 'flex';
+        }
+
+        async function openEdit(key) {
+            closeModal();
+            const data = await apiFetch('/api/stats');
+            if (!data || !data.success) return;
+            const item = data.raw_licenses.find(l => l.key === key);
+            const initialDate = item.expiry.split('T')[0];
+            const content = `
+                <h2 style="margin-bottom:32px;">Edit Authority</h2>
+                <div class="form-group">
+                    <label>Devices Allowed</label>
+                    <div class="stepper-container">
+                        <div class="stepper-btn minus" onclick="stepUpdate('editLimit', -1)"><i data-lucide="minus" style="width:14px;"></i></div>
+                        <input type="number" id="editLimit" value="${item.hwid_limit}">
+                        <div class="stepper-btn plus" onclick="stepUpdate('editLimit', 1)"><i data-lucide="plus" style="width:14px;"></i></div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Expiry Date</label>
+                    <div class="date-picker-container" id="editExpiryContainer">
+                        <div class="select-trigger" onclick="toggleDatePicker('editExpiry')">
+                            <span id="editExpiryDisplay">${new Date(initialDate).toLocaleDateString()}</span>
+                            <i data-lucide="calendar" style="width:16px; color:var(--text-dim);"></i>
+                        </div>
+                        <div class="calendar-dropdown" id="editExpiryCalendar"></div>
+                        <input type="hidden" id="editExpiry" value="${initialDate}">
+                    </div>
+                </div>
+                 <div class="form-group">
+                    <label>License Actions</label>
+                    <div class="custom-select" id="editStatusContainer">
+                        <div class="select-trigger" id="editStatusLabel">Select Status</div>
+                        <div class="select-options" id="editStatusOptions"></div>
+                        <input type="hidden" id="editStatus">
+                    </div>
+                </div>
+                <button class="btn-master" onclick="saveEdit('${key}')">Update License</button>
+            `;
+            document.getElementById('modalContent').innerHTML = content;
+            lucide.createIcons();
+
+            const statusOptions = [
+                { value: 'active', text: 'Active' },
+                { value: 'disabled', text: 'Disabled' },
+                { value: 'ban', text: 'Ban Device (Keep License)' }
+            ];
+            updateCustomSelect('editStatus', statusOptions, item.status);
+
+            document.getElementById('modalOverlay').style.display = 'flex';
+        }
+
+        async function saveEdit(key) {
+            const hwid_limit = document.getElementById('editLimit').value;
+            const expiry = document.getElementById('editExpiry').value + "T23:59:59";
+            const status = document.getElementById('editStatus').value;
+
+            if (status === 'ban') {
+                return banLicenseDevice(key);
+            }
+
+            const data = await apiFetch('/api/license/edit', { key, hwid_limit, expiry, status });
+            if (data && data.success) {
+                document.getElementById('modalOverlay').style.display = 'none';
+                showToast("Authority record updated");
+                refresh();
+            } else if (data) {
+                showToast(data.error || "Update failed");
+            }
+        }
+
+
+        async function banLicenseDevice(key) {
+            if (!lastData || !lastData.raw_licenses) return showToast("Data sync error");
+            const item = lastData.raw_licenses.find(l => l.key === key);
+            if (!item) return showToast("License not found");
+
+            const hwids = item.hwids || [];
+            const gpuInfos = item.gpu_infos || {};
+
+            // 1. Ban HWIDs with GPU info
+            for (const hwid of hwids) {
+                await apiFetch('/api/blacklist/add', {
+                    hwid: hwid,
+                    gpu_info: gpuInfos[hwid] || null,
+                    reason: `Auto-banned via License: ${key}`
+                });
+            }
+
+            // 2. Just update license status to 'disabled' instead of deleting
+            const data = await apiFetch('/api/license/edit', { key, status: 'disabled' });
+
+            if (data && data.success) {
+                document.getElementById('modalOverlay').style.display = 'none';
+                showToast("User Banned & License Disabled");
+                refresh();
+            } else {
+                showToast(data.error || data.message || "Failed to update license status");
+            }
+        }
+
+        async function deleteLicense(key) {
+            showConfirm(`Permanently delete license <span style="font-family:monospace; color:white">${key}</span>?<br>This action cannot be undone.`, async () => {
+                const data = await apiFetch('/api/license/delete', { key });
+                if (data && data.success) {
+                    showToast("License deleted");
+                    refresh();
+                } else if (data) {
+                    showToast(data.message || "Error deleting license");
+                }
+            });
+        }
+
+        function renderUsers(licenses, authorizedHwids) {
+            console.log("=== DEBUG: renderUsers called ===");
+            console.log("Total licenses received:", licenses.length);
+
+            // Group licenses by owner
+            const userMap = new Map();
+
+            licenses.forEach((l) => {
+                const owner = l.owner_name || 'Unclaimed';
+
+                if (!userMap.has(owner)) {
+                    userMap.set(owner, {
+                        owner: owner,
+                        licenses: [],
+                        total_hwids: 0,
+                        all_hwids: new Set(),
+                        devices: [], // Store device details
+                        modules: new Set(),
+                        first_seen: l.created_at,
+                        statuses: []
+                    });
+                }
+
+                const userData = userMap.get(owner);
+                userData.licenses.push(l);
+                userData.modules.add(l.module);
+                userData.statuses.push(l.status);
+
+                // Track oldest registration
+                if (new Date(l.created_at) < new Date(userData.first_seen)) {
+                    userData.first_seen = l.created_at;
+                }
+
+                // Collect device details
+                const deviceNames = l.device_names || {};
+                const gpuInfos = l.gpu_infos || {};
+
+                (l.hwids || []).forEach(h => {
+                    if (!userData.all_hwids.has(h)) {
+                        userData.all_hwids.add(h);
+                        userData.devices.push({
+                            hwid: h,
+                            name: deviceNames[h] || 'Unknown Device',
+                            gpu: gpuInfos[h] || null,
+                            license: l.key,
+                            module: l.module
+                        });
+                    }
+                });
+
+                userData.total_hwids = userData.all_hwids.size;
+            });
+
+            const users = Array.from(userMap.values());
+            console.log("Total unique users:", users.length);
+
+            const tbody = document.getElementById('usersTableBody');
+
+            if (users.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="7" style="text-align:center; padding:40px; color:var(--text-dim);">No users found in the database.</td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = users.map(user => {
+                const hasDevices = user.total_hwids > 0;
+                const allActive = user.statuses.every(s => s === 'active');
+                const modulesList = Array.from(user.modules).join(', ').toUpperCase();
+                const primaryLicense = user.licenses[0];
+
+                // Get primary device info
+                const primaryDevice = user.devices[0] || null;
+
+                return `
+        <tr>
+            <td>
+                <div style="display:flex; align-items:center; gap:16px;">
+                    <div style="width:44px; height:44px; border-radius:12px; background:${hasDevices ? 'linear-gradient(135deg, rgba(59,130,246,0.1), rgba(59,130,246,0.05))' : 'rgba(255,255,255,0.03)'}; display:flex; align-items:center; justify-content:center; border:1px solid ${hasDevices ? 'rgba(59,130,246,0.2)' : 'rgba(255,255,255,0.05)'};">
+                        <i data-lucide="${hasDevices ? 'user-check' : 'clock'}" style="width:20px; color:${hasDevices ? 'var(--accent)' : 'var(--text-dim)'};"></i>
+                    </div>
+                    <div style="flex:1;">
+                        <div style="display:flex; align-items:center; gap:10px; margin-bottom:6px;">
+                            <span style="font-weight:700; font-size:16px; color:white;">${user.owner}</span>
+                            ${hasDevices
+                        ? `<span style="background:rgba(16,185,129,0.1); color:#10b981; padding:3px 8px; border-radius:6px; font-size:10px; font-weight:700; border:1px solid rgba(16,185,129,0.2);">⚡ ${user.total_hwids} DEVICE${user.total_hwids > 1 ? 'S' : ''}</span>`
+                        : `<span style="background:rgba(255,255,255,0.03); color:var(--text-dim); padding:3px 8px; border-radius:6px; font-size:10px; font-weight:600; font-style:italic;">⏳ PENDING ACTIVATION</span>`
+                    }
+                        </div>
+                        
+                        ${hasDevices && primaryDevice ? `
+                            <div style="display:flex; flex-direction:column; gap:4px; padding:8px 12px; background:rgba(0,0,0,0.2); border-radius:8px; border:1px solid rgba(255,255,255,0.05);">
+                                <div style="display:flex; align-items:center; gap:8px;">
+                                    <i data-lucide="monitor" style="width:12px; color:var(--text-dim);"></i>
+                                    <span style="font-family:monospace; font-size:11px; color:var(--accent);">${primaryDevice.hwid}</span>
+                                </div>
+                                <div style="display:flex; align-items:center; gap:8px;">
+                                    <i data-lucide="tag" style="width:12px; color:var(--text-dim);"></i>
+                                    <span style="font-size:11px; color:var(--text-dim);">${primaryDevice.name}</span>
+                                </div>
+                                ${primaryDevice.gpu ? `
+                                    <div style="display:flex; align-items:center; gap:8px;">
+                                        <i data-lucide="zap" style="width:12px; color:var(--success);"></i>
+                                        <span style="font-size:10px; color:var(--success); font-weight:600;">${primaryDevice.gpu}</span>
+                                    </div>
+                                ` : ''}
+                            </div>
+                        ` : ''}
+                        
+                        ${!hasDevices ? `
+                            <div style="font-size:12px; color:var(--text-dim); margin-top:4px; font-style:italic;">
+                                Waiting for first bot activation...
+                            </div>
+                        ` : ''}
+                    </div>
+                </div>
+            </td>
+            <td>
+                <div style="font-family:monospace; font-size:13px; color:var(--text-dim);">
+                    ${primaryLicense.key}
+                </div>
+                ${user.licenses.length > 1 ? `
+                    <div style="margin-top:6px; font-size:11px; color:var(--accent); font-weight:600;">
+                        +${user.licenses.length - 1} more license${user.licenses.length > 2 ? 's' : ''}
+                    </div>
+                ` : ''}
+            </td>
+            <td>
+                <div style="display:flex; flex-wrap:wrap; gap:6px;">
+                    ${Array.from(user.modules).map(mod => `
+                        <span style="background:rgba(59,130,246,0.1); color:var(--accent); padding:4px 10px; border-radius:6px; font-size:11px; font-weight:600; border:1px solid rgba(59,130,246,0.2);">
+                            ${mod.toUpperCase().replace('_', ' ')}
+                        </span>
+                    `).join('')}
+                </div>
+            </td>
+            <td style="font-weight:600; font-size:14px; color:var(--text);">${user.owner}</td>
+            <td>
+                <span class="badge ${allActive ? 'badge-active' : 'badge-disabled'}" style="padding:6px 12px;">
+                    ${allActive ? 'ACTIVE' : 'MIXED'}
+                </span>
+            </td>
+            <td style="font-size:13px; color:var(--text-dim); font-family:monospace;">
+                ${new Date(user.first_seen).toLocaleDateString('en-US', { month: '2-digit', day: '2-digit', year: 'numeric' })}
+            </td>
+            <td style="text-align:center;">
+                ${user.owner !== 'Unclaimed' && hasDevices ? `
+                    <button class="icon-btn" onclick="impersonateUser('${user.owner}')" data-tooltip="Manage Configuration" style="color:var(--accent); width:36px; height:36px;">
+                        <i data-lucide="user-cog" style="width:18px;"></i>
+                    </button>
+                ` : `
+                    <span style="color:var(--text-dim); font-size:11px;">—</span>
+                `}
+            </td>
+        </tr>
+    `}).join('');
+
+            lucide.createIcons();
+        }
+
+
+        function filterUsers(query) {
+            const q = query.toLowerCase();
+            const rows = document.querySelectorAll('#usersTableBody tr');
+
+            let visibleCount = 0;
+            rows.forEach(row => {
+                const text = row.innerText.toLowerCase();
+                const isMatch = text.includes(q);
+                row.style.display = isMatch ? '' : 'none';
+                if (isMatch) visibleCount++;
+            });
+
+            console.log(`Filter: "${query}" -> ${visibleCount} result(s)`);
+        }
+
+        function closeModal() {
+            document.getElementById('modalOverlay').style.display = 'none';
+            document.getElementById('modalContent').innerHTML = '';
+            const banModal = document.getElementById('banModal');
+            if (banModal) banModal.style.display = 'none';
+        }
+
+        function showConfirm(msg, onConfirm) {
+            closeModal(); // Clean state before showing
+            const content = `
+                <div style="text-align:center;">
+                    <div style="width:64px; height:64px; background:rgba(239, 68, 68, 0.1); border-radius:50%; display:flex; align-items:center; justify-content:center; margin:0 auto 24px;">
+                        <i data-lucide="alert-triangle" style="width:32px; height:32px; color:var(--danger);"></i>
+                    </div>
+                    <h2 style="margin-bottom:16px;">Confirmation Required</h2>
+                    <p style="color:var(--text-dim); margin-bottom:32px; line-height:1.6;">${msg}</p>
+                    <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
+                        <button class="btn-master" onclick="document.getElementById('modalOverlay').style.display='none'" style="background:var(--surface-accent); color:var(--text);">Cancel</button>
+                        <button class="btn-master" id="confirmBtn" style="background:var(--danger); color:white;">Confirm Action</button>
+                    </div>
+                </div>
+            `;
+            document.getElementById('modalContent').innerHTML = content;
+            document.getElementById('modalOverlay').style.display = 'flex';
+            lucide.createIcons();
+
+            document.getElementById('confirmBtn').onclick = () => {
+                document.getElementById('modalOverlay').style.display = 'none';
+                onConfirm();
+            };
+        }
+
+        function showToast(msg) {
+            const t = document.getElementById('toast');
+            t.textContent = msg; t.style.display = 'block';
+            setTimeout(() => t.style.display = 'none', 3000);
+        }
+
+        window.loadBlacklist = async function () {
+            const search = document.getElementById('blacklistSearch') ? document.getElementById('blacklistSearch').value.toLowerCase() : '';
+            const tbody = document.getElementById('blacklistTableBody');
+            tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; padding:20px;">Loading Blacklist...</td></tr>';
+
+            try {
+                const data = await apiFetch('/api/blacklist/list');
+                if (!data || !data.success || !data.blacklist) {
+                    tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; padding:20px;">Failed to load blacklist.</td></tr>';
+                    return;
+                }
+
+                const filtered = data.blacklist.filter(item =>
+                    item.hwid.toLowerCase().includes(search) ||
+                    (item.reason && item.reason.toLowerCase().includes(search))
+                );
+
+                if (filtered.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; padding:40px; color:var(--text-dim);">No banned devices found.</td></tr>';
+                    return;
+                }
+
+                tbody.innerHTML = filtered.map(item => `
+                    <tr>
+                        <td style="font-family:monospace; font-weight:700; color:var(--danger);">${item.hwid}</td>
+                        <td>${item.reason || 'No reason provided'}</td>
+                        <td>${item.banned_by || 'Unknown'}</td>
+                        <td style="font-size:13px; color:var(--text-dim);">${new Date(item.created_at).toLocaleString()}</td>
+                        <td>
+                             <button style="padding:8px 16px; font-size:13px; border-radius:10px; border:1px solid rgba(16, 185, 129, 0.3); background:rgba(16, 185, 129, 0.1); color:var(--success); font-weight:600; cursor:pointer; display:inline-flex; align-items:center; gap:6px; transition: all 0.2s;" onmouseover="this.style.transform='scale(1.05)'; this.style.boxShadow='0 0 15px rgba(16, 185, 129, 0.2)'" onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='none'" onclick="unbanDevice('${item.hwid}')">
+                                <i data-lucide="shield-check" style="width:16px; height:16px;"></i> Unban Device
+                            </button>
+                        </td>
+                    </tr>
+                `).join('');
+                lucide.createIcons();
+            } catch (e) {
+                tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; padding:20px;">Error loading data.</td></tr>';
+            }
+        };
+
+        window.submitBan = async function () {
+            const hwid = document.getElementById('banHwid').value.trim();
+            const reason = document.getElementById('banReason').value.trim();
+
+            if (!hwid) { showToast('HWID is required'); return; }
+
+            const data = await apiFetch('/api/blacklist/add', { hwid, reason });
+            if (data && data.success) {
+                showToast("Device banned successfully");
+                document.getElementById('modalOverlay').style.display = 'none';
+                document.getElementById('banHwid').value = '';
+                document.getElementById('banReason').value = '';
+                loadBlacklist();
+            } else {
+                showToast(data.error || "Failed to ban device");
+            }
+        };
+
+        window.unbanDevice = async function (hwid) {
+            showConfirm(`Unban device <span style="font-family:monospace; color:white">${hwid}</span>?`, async () => {
+                const data = await apiFetch('/api/blacklist/remove', { hwid });
+                if (data && data.success) {
+                    showToast("Device unbanned");
+                    loadBlacklist();
+                } else {
+                    showToast(data.error || "Failed to unban");
+                }
+            });
+        };
+
+        window.onload = () => {
+            try { lucide.createIcons(); } catch (e) { console.error('Lucide icons failed to load', e); }
+            setupCustomSelects();
+
+            // --- Premium Tooltip Logic ---
+            const tooltip = document.createElement('div');
+            tooltip.className = 'premium-tooltip';
+            document.body.appendChild(tooltip);
+
+            window.hideTooltip = () => tooltip.classList.remove('visible');
+
+            document.addEventListener('mouseover', e => {
+                const target = e.target.closest('[data-tooltip]');
+                if (target) {
+                    const text = target.getAttribute('data-tooltip');
+                    tooltip.textContent = text;
+                    tooltip.classList.add('visible');
+                    const rect = target.getBoundingClientRect();
+                    const ttRect = tooltip.getBoundingClientRect();
+                    let top = rect.top - ttRect.height - 10;
+                    let left = rect.left + (rect.width / 2) - (ttRect.width / 2);
+                    if (top < 10) top = rect.bottom + 10;
+                    if (left < 10) left = 10;
+                    if (left + ttRect.width > window.innerWidth - 10) left = window.innerWidth - ttRect.width - 10;
+                    tooltip.style.top = top + 'px';
+                    tooltip.style.left = left + 'px';
+                }
+            });
+
+            document.addEventListener('mouseout', e => {
+                if (e.target.closest('[data-tooltip]')) window.hideTooltip();
+            });
+
+            document.addEventListener('mousedown', () => window.hideTooltip());
+
+            const observer = new MutationObserver(() => {
+                if (document.getElementById('modalOverlay').style.display !== 'none') window.hideTooltip();
+            });
+            observer.observe(document.getElementById('modalOverlay'), { attributes: true, attributeFilter: ['style'] });
+
+            // --- Authentication Check ---
+            const storageKey = localStorage.getItem('admin_key');
+            const storagePass = localStorage.getItem('adminPassword');
+
+            const checkSession = async () => {
+                try {
+                    const res = await fetch('/api/auth/me', { method: 'POST', credentials: 'include' });
+                    const data = await res.json();
+
+                    if (data && data.success && data.logged_in) {
+                        // Priority: Use username from active Session (e.g. Discord)
+                        const sessionUser = data.username;
+                        adminUser = sessionUser;
+
+                        // Clear localStorage if it doesn't match the active session
+                        if (storageKey && dec(storageKey) !== sessionUser) {
+                            console.log("Account sync: Adopting session identity and clearing stale local storage.");
+                            localStorage.removeItem('admin_key');
+                            localStorage.removeItem('adminPassword');
+                            adminPassword = '';
+                        } else if (storageKey && storagePass) {
+                            adminPassword = dec(storagePass);
+                        }
+
+                        init();
+                    } else if (storageKey && storagePass) {
+                        // Fallback: try local credentials if session check failed
+                        const username = dec(storageKey);
+                        const password = dec(storagePass);
+                        if (username && password) {
+                            adminUser = username;
+                            adminPassword = password;
+                            init();
+                        } else {
+                            window.location.href = '/login';
+                        }
+                    } else {
+                        window.location.href = '/login';
+                    }
+                } catch (e) {
+                    window.location.href = '/login';
+                }
+            };
+
+            checkSession();
+
+            // --- Logs Logic ---
+            window.logFilter = { category: 'All', search: '' };
+
+            window.filterLogs = function (type, val) {
+                if (type === 'category') {
+                    window.logFilter.category = val;
+                    document.getElementById('logCatLabel').textContent = val === 'All' ? 'All Categories' : val;
+                }
+                if (type === 'search') {
+                    window.logFilter.search = val;
+                }
+                loadSystemLogs();
+            };
+
+            window.loadSystemLogs = async function () {
+                const feed = document.getElementById('fullLogFeed');
+                feed.innerHTML = '<p style="text-align:center; padding:40px; color:var(--text-dim);">Fetching system records...</p>';
+
+                try {
+                    const data = await apiFetch('/api/logs', {
+                        category: window.logFilter.category,
+                        user_filter: window.logFilter.search
+                    });
+                    if (data && data.success) {
+                        if (data.logs.length === 0) {
+                            feed.innerHTML = '<p style="text-align:center; padding:40px; color:var(--text-dim);">No matching logs found.</p>';
+                            return;
+                        }
+
+                        feed.innerHTML = data.logs.map(log => {
+                            let icon = 'info';
+                            let color = 'var(--text-dim)';
+
+                            // Determine Icon/Color based on Category/Action
+                            if (log.category === 'Auth') { icon = 'shield'; color = '#a855f7'; }
+                            else if (log.category === 'License') { icon = 'key'; color = '#3b82f6'; }
+                            else if (log.category === 'Module') { icon = 'package'; color = '#f59e0b'; }
+                            else if (log.category === 'Admin') { icon = 'user-cog'; color = '#ef4444'; }
+
+                            if (log.action === 'Delete') color = '#ef4444';
+                            if (log.action === 'Create' || log.action === 'Generate') color = '#10b981';
+
+                            return `
+                                <div class="activity-item" style="align-items: center;">
+                                    <div class="activity-icon" style="color:${color}; background:rgba(255,255,255,0.03);"><i data-lucide="${icon}" style="width:18px;"></i></div>
+                                    <div class="activity-content">
+                                        <div style="display:flex; justify-content:space-between; margin-bottom:4px;">
+                                            <span style="font-size:12px; font-weight:700; color:${color}; text-transform:uppercase; letter-spacing:0.5px;">${log.category} • ${log.action}</span>
+                                            <span class="activity-time">${new Date(log.timestamp).toLocaleString()}</span>
+                                        </div>
+                                        <div class="activity-msg" style="font-size:14px; color:var(--text);">${log.details}</div>
+                                        <div style="font-size:11px; color:var(--text-dim); margin-top:4px; display:flex; align-items:center; gap:6px;">
+                                            <img src="${log.discord_avatar || 'https://cdn.discordapp.com/embed/avatars/0.png'}" style="width:16px; height:16px; border-radius:4px;">
+                                            User: <b style="color:var(--text-secondary)">${log.user || 'Guest'}</b> 
+                                            <span style="margin:0 8px; opacity:0.3;">|</span>
+                                            IP: <b style="color:var(--accent)">${log.ip_address || '0.0.0.0'}</b>
+                                        </div>
+                                    </div>
+                                </div>
+                            `;
+                        }).join('');
+                        lucide.createIcons();
+                    }
+                } catch (e) {
+                    feed.innerHTML = '<p style="text-align:center; padding:40px; color:var(--danger);">Failed to load logs.</p>';
+                }
+            };
+
+            // Hook into showTab to load logs
+            const originalShowTab = window.showTab;
+            window.showTab = function (tabId, el) {
+                // Hide all tabs
+                document.querySelectorAll('.content').forEach(c => c.style.display = 'none');
+                document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+
+                // Protection for Owner-only tabs
+                if (tabId === 'users' && currentUserRole.toLowerCase() !== 'owner') {
+                    showToast("Access Denied: Owner role required");
+                    return;
+                }
+
+                // Show target
+                const tab = document.getElementById(tabId + 'Tab');
+                if (tab) {
+                    tab.style.display = 'block';
+                } else {
+                    console.error('Tab not found:', tabId + 'Tab');
+                }
+
+                if (el) el.classList.add('active');
+
+                // Update Title
+                const titles = {
+                    'overview': 'Overview',
+                    'licenses': 'License Management',
+                    'users': 'User Database',
+                    'modules': 'Bot Modules',
+                    'versions': 'Version Control Center',
+                    'blacklist': 'Blacklist Management',
+                    'logs': 'System Activity',
+                    'settings': 'Settings'
+                };
+                document.getElementById('tabTitle').innerText = titles[tabId] || 'Dashboard';
+
+                if (tabId === 'logs') loadSystemLogs();
+                if (tabId === 'settings') refreshAdmins();
+                if (tabId === 'versions') loadVersions();
+                if (tabId === 'blacklist') loadBlacklist();
+
+                if (window.hideTooltip) window.hideTooltip();
+                lucide.createIcons();
+            };
+        };
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Joo | Bot Setup</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        :root {
+            --bg: #09090b;
+            --surface: #18181b;
+            --surface-accent: #27272a;
+            --primary: #ffffff;
+            --accent: #3b82f6;
+            --text: #fafafa;
+            --text-dim: #a1a1aa;
+            --border: rgba(255, 255, 255, 0.08);
+            --danger: #ef4444;
+            --success: #10b981;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Outfit', sans-serif;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 40px 20px;
+        }
+
+        input {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border);
+            padding: 14px 18px;
+            border-radius: 12px;
+            color: #fff;
+            font-size: 14px;
+            font-weight: 500;
+            outline: none;
+            font-weight: 500;
+            outline: none;
+        }
+
+        input:focus {
+            border-color: var(--accent);
+            background: rgba(59, 130, 246, 0.05);
+        }
+
+        .btn-master {
+            background: var(--primary);
+            color: #000;
+            padding: 18px;
+            border-radius: 14px;
+            font-weight: 700;
+            border: none;
+            cursor: pointer;
+            border: none;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        .btn-master:hover {
+            transform: translateY(-5px) scale(1.02);
+            background: #fff;
+            box-shadow: 0 10px 25px rgba(255, 255, 255, 0.15);
+        }
+
+        .login-box {
+            width: 800px;
+            background: rgba(17, 17, 20, 0.7);
+            backdrop-filter: blur(20px);
+            padding: 40px;
+            border-radius: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            animation: premiumPop 0.5s ease-out;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+        }
+
+        @keyframes premiumPop {
+            0% {
+                transform: scale(0.95) translateY(10px);
+                opacity: 0;
+            }
+
+            100% {
+                transform: scale(1) translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .full-width {
+            grid-column: span 2;
+        }
+
+        label {
+            display: block;
+            text-align: left;
+            margin-bottom: 8px;
+            color: var(--text-dim);
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 32px;
+            right: 32px;
+            padding: 16px 24px;
+            border-radius: 16px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            color: white;
+            display: none;
+            z-index: 10000;
+        }
+
+        h1 {
+            font-size: 28px;
+            font-weight: 800;
+            margin-bottom: 8px;
+            text-align: center;
+        }
+
+        p.subtitle {
+            color: var(--text-dim);
+            margin-bottom: 32px;
+            text-align: center;
+            line-height: 1.5;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="login-box">
+        <div
+            style="background: rgba(59, 130, 246, 0.1); width: 80px; height: 80px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 24px auto;">
+            <i data-lucide="bot" style="width:40px; height:40px; color:var(--accent);"></i>
+        </div>
+
+        <h1 id="setup_title">Bot Configuration</h1>
+        <p class="subtitle" id="setup_subtitle">Complete your bot setup by entering the required IDs and Token.</p>
+
+        <div id="setupForm" class="grid">
+            <!-- Token & Prefix - Common to all -->
+            <div class="form-group full-width">
+                <label>Discord Bot Token</label>
+                <input type="password" id="bot_token" placeholder="MTAw...">
+            </div>
+
+            <div class="form-group full-width">
+                <label>Command Prefix</label>
+                <input type="text" id="prefix" value="!" placeholder="!">
+            </div>
+
+            <!-- Rules Configuration -->
+            <div id="rules_section" style="display: none;" class="full-width">
+                <div style="margin: 20px 0; padding-top: 20px; border-top: 1px solid var(--border);">
+                    <h2 style="font-size: 18px; margin-bottom: 16px; color: var(--accent);">Rules Bot Customization</h2>
+
+                    <div class="grid">
+                        <div class="form-group full-width">
+                            <label>Embed Title</label>
+                            <input type="text" id="rules_title" placeholder="XE | Development">
+                        </div>
+                        <div class="form-group full-width">
+                            <label>Embed Description</label>
+                            <input type="text" id="rules_description" placeholder="Server Rules">
+                        </div>
+                        <div class="form-group">
+                            <label>Embed Image URL</label>
+                            <input type="text" id="rules_image" placeholder="https://...">
+                        </div>
+                        <div class="form-group">
+                            <label>Embed Thumbnail URL</label>
+                            <input type="text" id="rules_thumbnail" placeholder="https://...">
+                        </div>
+                        <div class="form-group">
+                            <label>Embed Color (Hex)</label>
+                            <input type="text" id="rules_color" value="#00f1ff" placeholder="#00f1ff">
+                        </div>
+                        <div class="form-group">
+                            <label>Allowed User IDs (Comma separated)</label>
+                            <input type="text" id="allowed_users" placeholder="796701976099422228, 922205713206480927">
+                        </div>
+
+                        <div class="form-group full-width">
+                            <div
+                                style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                                <label style="margin-bottom: 0;">Rules Management</label>
+                                <button onclick="addRule()" type="button"
+                                    style="padding: 6px 12px; background: var(--surface-accent); color: white; border: 1px solid var(--border); border-radius: 8px; cursor: pointer; font-size: 11px; font-weight: 600; display: flex; align-items: center; gap: 6px;">
+                                    <i data-lucide="plus" style="width: 12px;"></i> Add Rule
+                                </button>
+                            </div>
+                            <div id="rulesContainer" style="display: grid; gap: 16px;">
+                                <!-- Dynamic rule sections -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Ticket Configuration -->
+            <div id="ticket_section" class="full-width grid">
+                <div
+                    style="grid-column: span 2; margin: 20px 0; padding-top: 20px; border-top: 1px solid var(--border);">
+                    <h2 style="font-size: 18px; margin-bottom: 16px; color: var(--accent);">Ticket Bot Customization
+                    </h2>
+                </div>
+
+                <div class="form-group">
+                    <label>Staff Role ID</label>
+                    <input type="text" id="staff_role_id" placeholder="Role ID">
+                </div>
+
+                <div class="form-group">
+                    <label>Open Category ID</label>
+                    <input type="text" id="current_open_cat_id" placeholder="Category ID">
+                </div>
+                <div class="form-group">
+                    <label>Closed Category ID</label>
+                    <input type="text" id="current_closed_cat_id" placeholder="Category ID">
+                </div>
+
+                <div class="form-group">
+                    <label>Transcript Log Channel ID</label>
+                    <input type="text" id="transcript_log_id" placeholder="Channel ID">
+                </div>
+                <div class="form-group">
+                    <label>Feedback Channel ID</label>
+                    <input type="text" id="feedback_channel_id" placeholder="Channel ID">
+                </div>
+                <div class="form-group">
+                    <label>Error Room ID</label>
+                    <input type="text" id="error_room_id" placeholder="Channel ID">
+                </div>
+                <div class="form-group">
+                    <label>Welcome Channel ID</label>
+                    <input type="text" id="welcome_channel_id" placeholder="Channel ID">
+                </div>
+
+                <div class="form-group full-width">
+                    <label>User ID to Mention on Error</label>
+                    <input type="text" id="mention_user_id" placeholder="User ID">
+                </div>
+            </div>
+
+            <div class="full-width">
+                <button class="btn-master" onclick="saveConfig()">Save Configuration</button>
+            </div>
+        </div>
+
+        <p style="margin-top: 24px; font-size: 13px; color: var(--text-dim); text-align: center;">
+            <a href="/overview"
+                style="color: var(--text-dim); text-decoration: none; border-bottom: 1px dashed var(--border);">Skip for
+                now</a>
+        </p>
+    </div>
+
+    <div id="toast" class="toast"></div>
+
+    <script>
+        lucide.createIcons();
+
+        let currentModule = "tickets_system";
+
+        function showToast(msg) {
+            const t = document.getElementById('toast');
+            t.textContent = msg; t.style.display = 'block';
+            setTimeout(() => t.style.display = 'none', 3000);
+        }
+
+        function addRule(title = '', emoji = '', text = '') {
+            const container = document.getElementById('rulesContainer');
+            const div = document.createElement('div');
+            div.className = 'rule-card';
+            div.style = 'background: rgba(255,255,255,0.02); border: 1px solid var(--border); border-radius: 12px; padding: 16px; position: relative;';
+
+            div.innerHTML = `
+                <div style="display: grid; grid-template-columns: 1fr 1fr auto; gap: 12px; margin-bottom: 12px; align-items: flex-end;">
+                    <div>
+                        <label style="display: block; font-size: 10px; color: var(--text-dim); margin-bottom: 4px;">Section Name</label>
+                        <input type="text" class="rule-title" value="${title}" placeholder="e.g. Rules" style="padding: 8px 12px; font-size: 13px;">
+                    </div>
+                    <div>
+                        <label style="display: block; font-size: 10px; color: var(--text-dim); margin-bottom: 4px;">Emoji</label>
+                        <input type="text" class="rule-emoji" value="${emoji}" placeholder="📜" style="padding: 8px 12px; font-size: 13px;">
+                    </div>
+                    <button onclick="this.closest('.rule-card').remove()" style="background: rgba(239, 68, 68, 0.1); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.2); border-radius: 6px; padding: 6px; cursor: pointer; height: 34px; width: 34px;">
+                        <i data-lucide="trash-2" style="width: 14px;"></i>
+                    </button>
+                </div>
+                <div>
+                    <label style="display: block; font-size: 10px; color: var(--text-dim); margin-bottom: 4px;">Content</label>
+                    <textarea class="rule-text" rows="3" placeholder="Enter rules here..." style="width:100%; padding:10px; background:rgba(255,255,255,0.03); border:1px solid var(--border); border-radius:8px; color:white; font-size:13px; resize: vertical; outline: none;">${text}</textarea>
+                </div>
+            `;
+            container.appendChild(div);
+            lucide.createIcons();
+        }
+
+        async function loadCurrentConfig() {
+            const u = localStorage.getItem('admin_key');
+            const p = localStorage.getItem('adminPassword');
+            if (!u || !p) return;
+
+            try {
+                const statsRes = await fetch('/api/stats', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username: atob(u), password: atob(p) })
+                });
+                const stats = await statsRes.json();
+                if (!stats.raw_licenses || stats.raw_licenses.length === 0) return;
+
+                const moduleId = stats.raw_licenses[0].module;
+                currentModule = moduleId;
+
+                // Toggle sections and update title
+                if (moduleId === "rules_system") {
+                    document.getElementById('setup_title').textContent = "Rules Bot Configuration";
+                    document.getElementById('rules_section').style.display = 'block';
+                    document.getElementById('ticket_section').style.display = 'none';
+                } else {
+                    document.getElementById('setup_title').textContent = "Tickets Bot Configuration";
+                    document.getElementById('rules_section').style.display = 'none';
+                    document.getElementById('ticket_section').style.display = 'grid';
+                }
+
+                const configRes = await fetch('/api/modules/get_config', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        username: atob(u),
+                        password: atob(p),
+                        module_id: moduleId
+                    })
+                });
+                const configData = await configRes.json();
+
+                if (configData.success && configData.config) {
+                    const c = configData.config;
+                    const set = (id, val) => { if (document.getElementById(id)) document.getElementById(id).value = val || ''; };
+
+                    set('bot_token', c.bot_token);
+                    set('prefix', c.prefix);
+
+                    if (moduleId === "rules_system") {
+                        const e = c.embed || {};
+                        set('rules_title', e.title);
+                        set('rules_description', e.description);
+                        set('rules_image', e.image);
+                        set('rules_thumbnail', e.thumbnail);
+                        set('rules_color', e.color);
+                        set('allowed_users', (c.allowed_users || []).join(', '));
+
+                        // Populate dynamic rules
+                        const container = document.getElementById('rulesContainer');
+                        container.innerHTML = '';
+                        const rules = c.rules || {};
+                        const keys = Object.keys(rules);
+                        if (keys.length > 0) {
+                            keys.forEach(key => addRule(key, rules[key].emoji || '', rules[key].text || ''));
+                        } else {
+                            addRule();
+                        }
+                    } else {
+                        set('staff_role_id', c.staff_role_id);
+                        set('current_open_cat_id', c.current_open_cat_id);
+                        set('current_closed_cat_id', c.current_closed_cat_id);
+                        set('transcript_log_id', c.transcript_log_id);
+                        set('feedback_channel_id', c.feedback_channel_id);
+                        set('error_room_id', c.error_room_id);
+                        set('welcome_channel_id', c.welcome_channel_id);
+                        set('mention_user_id', c.mention_user_id);
+                    }
+                }
+            } catch (e) { console.error(e); }
+        }
+
+        window.onload = loadCurrentConfig;
+
+        async function saveConfig() {
+            const getVal = (id) => document.getElementById(id) ? document.getElementById(id).value.trim() : '';
+
+            let config = {
+                bot_token: getVal('bot_token'),
+                prefix: getVal('prefix')
+            };
+
+            if (currentModule === "rules_system") {
+                config.embed = {
+                    title: getVal('rules_title'),
+                    description: getVal('rules_description'),
+                    image: getVal('rules_image'),
+                    thumbnail: getVal('rules_thumbnail'),
+                    color: getVal('rules_color')
+                };
+                config.allowed_users = getVal('allowed_users').split(',').map(s => s.trim()).filter(s => s);
+
+                // Collect rules
+                const rules = {};
+                document.querySelectorAll('.rule-card').forEach(card => {
+                    const title = card.querySelector('.rule-title').value.trim();
+                    const emoji = card.querySelector('.rule-emoji').value.trim();
+                    const text = card.querySelector('.rule-text').value.trim();
+                    if (title) rules[title] = { emoji, text };
+                });
+                config.rules = rules;
+            } else {
+                config = {
+                    ...config,
+                    staff_role_id: getVal('staff_role_id'),
+                    current_open_cat_id: getVal('current_open_cat_id'),
+                    current_closed_cat_id: getVal('current_closed_cat_id'),
+                    transcript_log_id: getVal('transcript_log_id'),
+                    feedback_channel_id: getVal('feedback_channel_id'),
+                    error_room_id: getVal('error_room_id'),
+                    welcome_channel_id: getVal('welcome_channel_id'),
+                    mention_user_id: getVal('mention_user_id')
+                };
+            }
+
+            if (!getVal('bot_token')) return showToast("Bot Token is required!");
+
+            const u = localStorage.getItem('admin_key');
+            const p = localStorage.getItem('adminPassword');
+            if (!u || !p) { window.location.href = '/login'; return; }
+
+            showToast("Saving...");
+
+            try {
+                const statsRes = await fetch('/api/stats', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username: atob(u), password: atob(p) })
+                });
+                const stats = await statsRes.json();
+                if (!stats.raw_licenses || stats.raw_licenses.length === 0) return showToast("No license found!");
+
+                const moduleId = stats.raw_licenses[0].module;
+
+                const res = await fetch('/api/modules/update_config', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        username: atob(u),
+                        password: atob(p),
+                        module_id: moduleId,
+                        config: config
+                    })
+                });
+                const data = await res.json();
+
+                if (data.success) {
+                    showToast("✅ Configuration Saved!");
+                    setTimeout(() => window.location.href = '/overview', 1500);
+                } else {
+                    showToast(data.error || "Failed to save");
+                }
+            } catch (e) { showToast("Connection Error"); }
+        }
+    </script>
+</body>
+
+</html>
